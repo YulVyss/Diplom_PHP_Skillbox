@@ -403,6 +403,7 @@ a:focus {
   padding: 20px 60px;
   display: flex;
   justify-content: center;
+  align-items: center;
   border-bottom: 1px solid #ebebeb;
 }
 .page-header__logo {
@@ -580,7 +581,7 @@ a:focus {
   display: flex;
 }
 .shop__filter {
-  flex-basis: 250px;
+  flex-basis: 220px;
   flex-shrink: 0;
   margin-right: 50px;
 }
@@ -1155,4 +1156,16 @@ a:focus {
 .order-item__toggle--active {
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
+}
+.authorization{
+  font-size: 20px;
+  font-family: "Open Sans", "sans-serif";
+  margin-left: 100px;
+}
+.response{
+  text-align: center;
+  margin: 30px 0;
+}
+.product__added{
+  color: #e45446;
 }

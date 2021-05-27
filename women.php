@@ -1,18 +1,11 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header.php'; ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/aside.php'; ?>
 
-<?php
-if(empty($_GET)) {
-  $products = getAllProducts($connect);
-}
-?>
+
       <section class="shop__list">
       <?php 
-      if($products){
+        $products = getFilterCategoryProducts($connect, '1');
         showProducts($products);
-      }
-           
-  
       ?>
       </section>
       <ul class="shop__paginator paginator">

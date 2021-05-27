@@ -1,21 +1,13 @@
 <?php 
-
+if (!isset($_COOKIE['authorized'])) {
+  header("Location: /php_diplom/admin/index.php"); 
+  exit();
+}
 include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header_adm.php'; 
-
-// if(isset($_POST) && !empty($_POST['submit'])) {
-//    $product_name = htmlspecialchars($_POST['product-name']);
-//     $product_price = htmlspecialchars($_POST['product-price']);
-//     $product_photo = htmlspecialchars($_POST['product-photo']);
-//     $product_section = $_POST['category'];
-//     $new = $_POST['new'] ?? '0';
-//     $sale = $_POST['sale'] ?? '0';
-//     addNewProduct($connect, $product_name, $product_price, 'product-10.jpg', $product_section, $new, $sale);
-//     print "$product_name" . json_encode($product_name);
-//   }
 
 ?>
 <main class="page-add">
-
+  
   <h1 class="h h--1">Добавление товара</h1>
   <form class="custom-form" action="form.php" id='addProduct'  method="post" enctype="multipart/form-data">
     <fieldset class="page-add__group custom-form__group">
@@ -35,6 +27,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header_adm.php';
     </fieldset>
     <fieldset class="page-add__group custom-form__group">
       <legend class="page-add__small-title custom-form__title">Фотография товара</legend>
+      
       <ul class="add-list">
         <li class="add-list__item add-list__item--add">
           <input type="file" name="product-photo" id="product-photo" hidden="">
@@ -59,7 +52,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header_adm.php';
   </form>
   <section class="shop-page__popup-end page-add__popup-end" hidden="">
     <div class="shop-page__wrapper shop-page__wrapper--popup-end">
-      <h2 class="h h--1 h--icon shop-page__end-title">Товар успешно добавлен</h2>
+      <h2 class="h h--1 h--icon shop-page__end-title">Товар <span class='product__added'></span> успешно добавлен</h2>
       
     </div>
   </section>

@@ -1,24 +1,4 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header.php'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/aside.php'; ?>
-
-      <section class="shop__list">
-      <?php 
-        $products = getNewProducts($connect, 'sale');
-        showProducts($products);
-      
-      ?>
-      </section>
-      <ul class="shop__paginator paginator">
-        <li>
-          <a class="paginator__item">1</a>
-        </li>
-        <li>
-          <a class="paginator__item" href="">2</a>
-        </li>
-      </ul>
-    </div>
-  </section>
-  <section class="shop-page__order" hidden="">
+<section class="shop-page__order" hidden="">
     <div class="shop-page__wrapper">
       <h2 class="h h--1">Оформление заказа</h2>
       <form action="#" method="post" class="custom-form js-order">
@@ -126,8 +106,3 @@
       <button class="button">Продолжить покупки</button>
     </div>
   </section>
-</main>
-
-
-</html>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php'; ?>

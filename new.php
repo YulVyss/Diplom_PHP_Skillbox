@@ -2,7 +2,11 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/aside.php'; ?>
 
       <section class="shop__list">
-      <?php getNewProducts($connect)?>
+      <?php 
+        $products = getNewProducts($connect, 'new');
+        showProducts($products);
+      
+      ?>
       </section>
       <ul class="shop__paginator paginator">
         <li>

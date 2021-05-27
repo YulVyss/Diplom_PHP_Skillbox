@@ -1,9 +1,5 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header_adm.php'; 
 
-if(!empty($_POST)) {
-  $product_name = htmlspecialchars($_POST['product-name']);
-  echo $product_name;
-}
 ?>
 <main class="page-products">
   <h1 class="h h--1">Товары</h1>
@@ -18,7 +14,7 @@ if(!empty($_POST)) {
   <ul class="page-products__list">
     <?php 
     $products = getAllProducts($connect);
-    showProductsAdm($products);  ?>
+    showProductsAdm($connect, $products);  ?>
   </ul>
 </main>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php';

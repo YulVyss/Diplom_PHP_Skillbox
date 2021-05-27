@@ -1,56 +1,128 @@
-let url = 'form.php'
+// let url = 'form.php'
+let form = document.getElementById('addProduct')
+let btn = document.querySelector('.addProduct')
 
-// let btn = document.querySelector('.addProduct')
-// if (btn) {
-//   btn.addEventListener('click', function (e) {
-//     e.preventDefault();
-//     // e.stopPropagation();
+$("#addProduct").submit(function (e) {
+  e.preventDefault();
+  let product = new FormData(form)
+  //просмотр данных о продукте в консоли
+  // for (let [name, value] of product) {
+  //   console.log(`${name} = ${value}`);
+  // }
 
-//     let name = document.getElementById('product-name').value;
-//     let price = document.getElementById('product-price').value;
-//     let photo = document.getElementById('product-photo').value;
-//     let sale = document.getElementById('sale').value;
-//     let newprod = document.getElementById('new').value;
-//     let product = [name, price, photo, sale, newprod]
+  $.ajax({
+    type: "POST",
+    url: 'form.php',
+    data: product,
+    dataType: 'json',
+    contentType: false,
+    processData: false,
+    success: function (data) {
+      form.hidden = true;
+      const prodName = document.querySelector('.product__added')
+      const popupEnd = document.querySelector('.page-add__popup-end')
+      prodName.innerHTML = `${data}`
+      popupEnd.hidden = false;
+      // console.log('продукт ' + data + ' добавлен в каталог')
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log('ERROR ' + errorThrown + jqXHR);
+    }
+  })
+})
 
-//     fetch(url, {
-//       method: 'POST',
-//       dataType: 'json',
-//       body: name,
-//     })
-//       .then(response => {
-//         res = response.name
-//         console.log(res)
-//       })
+$("#authorization").submit(function (e) {
+  e.preventDefault();
+  let form = document.getElementById('authorization')
+  let authorization = new FormData(form)
+  for (let [name, value] of authorization) {
+    console.log(`${name} = ${value}`);
+  }
+  let response = document.querySelector('.response')
+  $.ajax({
+    type: "POST",
+    url: '../include/login.php',
+    data: authorization,
+    dataType: 'json',
+    contentType: false,
+    processData: false,
+    success: function (data) {
+      console.log(data)
+      if (data == 'false') {
+        response.innerHTML = 'не верно введен логин и/или пароль, попробуйте снова'
+      } else if (data === 1) {
+        document.location.href = "/php_diplom/products/index.php";
+      } else {
+        document.location.href = "/php_diplom/products/orders.php";
+      }
 
-//   })
-// }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      response.innerHTML = 'произошла ошибка, попробуйте снова'
+      console.log('ERROR ' + errorThrown + jqXHR);
+    }
+  })
+})
 
-// $('button[type="submit"]').on('click', function (event) {
-//   event.stopPropagation();
-//   event.preventDefault();
-//   let name = document.getElementById('product-name').value;
-//   let price = document.getElementById('product-price').value;
-//   let photo = document.getElementById('product-photo').value;
-//   let sale = document.getElementById('sale').value;
-//   let newprod = document.getElementById('new').value;
-//   let product = [name, price, photo, sale, newprod]
-//   // product.push(name, price, photo, category.value, sale, newprod);
-//   console.log(product);
+function getCounter() {
+  let productsOnPage = document.querySelectorAll('.product')
+  let counter = productsOnPage.length
+  document.querySelector(".res-sort").innerHTML = counter
+}
+getCounter()
 
-//   $.ajax({
-//     url: url,
-//     type: 'POST',
-//     data: product,
-//     cache: false,
-//     dataType: 'json',
-//     processData: false,
-//     contentType: false,
-//     success: function (data) {
-//       console.log(data.status)
-//     },
-//     error: function (jqXHR, textStatus, errorThrown) {
-//       console.log('ERROR ' + errorThrown);
-//     }
-//   })
-// });
+
+// переделать!!!
+$('#sortBy').change(function () {
+  let sort = $(this).val();
+  $.get("./include/productsFilter.php", sort);
+
+})
+
+
+$('#sortOrder').change(function (e) {
+  e.preventDefault();
+  console.log('ok');
+})
+let url1 = '';
+$('.filter__list-item').click(function (e) {
+  e.preventDefault();
+  $(this).addClass('active');
+  let category = this.getAttribute('name')
+  if (category > 0) {
+    url1 = `category=${category}&`;
+  }
+
+  return url1;
+})
+
+
+
+
+$('#filter-button').click(function (e) {
+  e.preventDefault()
+
+  let minP = parseInt($('.min-price').text())
+  let maxP = parseInt($('.max-price').text())
+  let filtNew = 0
+  let filtSale = 0
+  if ($('#new').is(':checked')) {
+    filtNew = 1;
+  }
+  if ($('#sale').is(':checked')) {
+    filtSale = 1;
+  }
+  filter = url1 + 'min=' + minP + '&max=' + maxP + '&new=' + filtNew + '&sale=' + filtSale
+  console.log(filter)
+  $.ajax({
+    url: '/php_diplom/include/productsFilter.php',
+    data: filter,
+    type: 'get',
+    success: function (html) {
+      $('.shop__list').html(html).hide().fadeIn(1000);
+
+    }
+  })
+
+})
+

@@ -9,4 +9,6 @@ $host = 'localhost';
 $user = 'mysql'; //имя пользователя
 $password = 'mysql'; //пароль
 $bdname = 'fashion'; // название БД
-// $login = $_SESSION['current_login'] ?? '';
+$login = $_SESSION['current_login'] ?? '';
+
+$counter = 0;
