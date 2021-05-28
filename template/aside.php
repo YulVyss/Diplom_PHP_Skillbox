@@ -57,7 +57,7 @@
     <div class="shop__wrapper">
       <section class="shop__sorting">
         <div class="shop__sorting-item custom-form__select-wrapper">
-          <select class="custom-form__select" name="category" method="get" id="sortBy">
+          <select class="custom-form__select" name="category" id="sortBy">
             <option hidden="">Сортировка</option>
             <option class="option" value="sortByPrice">По цене</option>
             <option class="option" value="sortByName">По названию</option>

@@ -71,58 +71,80 @@ function getCounter() {
 }
 getCounter()
 
+// сортировка товаров
 
-// переделать!!!
-$('#sortBy').change(function () {
-  let sort = $(this).val();
-  $.get("./include/productsFilter.php", sort);
-
-})
-
+let filter = '';
 
 $('#sortOrder').change(function (e) {
   e.preventDefault();
-  console.log('ok');
+  makeReq()
+  sendReq(filter)
 })
-let url1 = '';
+
+// выбор категории товаров
 $('.filter__list-item').click(function (e) {
   e.preventDefault();
+
   $(this).addClass('active');
   let category = this.getAttribute('name')
   if (category > 0) {
-    url1 = `category=${category}&`;
+    filter = `category=${category}`;
   }
 
-  return url1;
+  // очистка сортировки
+  $('#sortBy').val('Сортировка')
+  $('#sortOrder').val('Порядок')
+  // очистка чекбоксов
+  $('#sale').attr('checked', false);
+  $('#new').attr('checked', false);
+  sendReq(filter)
+  filter = ''
 })
 
 
-
+// фильтрация товаров по кнопке 'Применить'
 
 $('#filter-button').click(function (e) {
   e.preventDefault()
+  makeReq()
+  sendReq(filter)
+  filter = ''
+})
 
-  let minP = parseInt($('.min-price').text())
-  let maxP = parseInt($('.max-price').text())
-  let filtNew = 0
-  let filtSale = 0
-  if ($('#new').is(':checked')) {
-    filtNew = 1;
-  }
-  if ($('#sale').is(':checked')) {
-    filtSale = 1;
-  }
-  filter = url1 + 'min=' + minP + '&max=' + maxP + '&new=' + filtNew + '&sale=' + filtSale
-  console.log(filter)
+// отправка запроса в БД
+function sendReq(filter) {
   $.ajax({
     url: '/php_diplom/include/productsFilter.php',
     data: filter,
     type: 'get',
     success: function (html) {
       $('.shop__list').html(html).hide().fadeIn(1000);
-
     }
   })
+}
 
-})
+// собираем GET запрос
+function makeReq() {
 
+  let category = document.querySelector('.filter__list-item.active').getAttribute('name')
+  filter += `category=${category}`
+  let minP = parseInt($('.min-price').text())
+  let maxP = parseInt($('.max-price').text())
+  filter += '&min=' + minP + '&max=' + maxP
+  let filtNew = 0
+  let filtSale = 0
+  if ($('#new').is(':checked')) {
+    filter += '&new=' + 1
+  }
+  if ($('#sale').is(':checked')) {
+    filter += '&sale=' + 1
+  }
+
+  let sort = $('#sortBy').val()
+  let order = $('#sortOrder').val()
+  if (sort !== 'Сортировка' && order !== 'Порядок') {
+    filter += '&sort=' + sort + '&order=' + order
+  }
+  // console.log(filter)
+  return filter
+}
