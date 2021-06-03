@@ -31,34 +31,15 @@ function getAllProducts($connect, $num, $start) {
         return mysqli_query($connect, "SELECT * from products LIMIT $num OFFSET $start");
     }
 }
-// // получить из БД продукты сортированные по 
-// function getSortedProducts($connect, $sort) {
-//     if (mysqli_connect_errno()) {
-//         $err = "Ошибка ".mysqli_connect_error();
-//         exit();
-//     } else {
-//         return mysqi_query($connect, "SELECT * from products  ORDER BY $sort");
-//     }
-// }
-
-
-// сортировка всех продуктов на главной странице
-
-// function sortProducts($a, $b) {
-//     return $a['sort'] > $b['sort'];
-// }
-// function sortByPrice($products) {
-//     usort($products, sortProducts($price));  
-// }
 
 // получение всех новинок или распродаж
-function getNewProducts($connect, $filter) {
+function getSaleNewProducts($connect, $filter, $num, $start) {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        return mysqli_query($connect, "SELECT * from products where $filter=1");
-        // showProducts($products);
+        $req = "SELECT * from products where ".$filter." LIMIT $num OFFSET $start";
+        return mysqli_query($connect, $req);
     }
 }
 // получение распродаж и новинок 
@@ -229,7 +210,7 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
     }  
     
     
-    if($data['sort'] > 0){
+    if($data['sort']){
         if($data['sort'] == 'sortByName' && $data['order'] == 'on'){
             $req .= " ORDER BY name ASC ";
         } elseif($data['sort'] == 'sortByName' && $data['order'] == 'reverse'){

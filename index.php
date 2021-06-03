@@ -5,19 +5,15 @@
 $req = " LIMIT $num";
 
 
-// $total = getCounter($page, $connect, 'SELECT COUNT(*) FROM products '.$req);
-
-
-
 if(($_GET['page'])){
-  // $start = ($_GET['page'] * $num) - $num;
-  // $req = getRequest($_GET, $num, $start, "SELECT * from products ");
-    
-  //   $count = getRequest($_GET, $num, $start, "SELECT COUNT(*) FROM products ");
-    
-  //   $counter = getCounter($connect, $count);
-  //   echo "counter: " . $counter;
-  //   $products = getFilterCategoryProducts($connect, $req);
+  $start = ($_GET['page'] * $num) - $num;
+  $req = getRequest($_GET, $num, $start, "SELECT * from products ");
+  
+    $count = getRequest($_GET, $num, $start, "SELECT COUNT(*) from products ");
+    echo $count; 
+    $counter = getCounter($connect, $count);
+    echo "counter: " . $counter;
+    $products = getFilterCategoryProducts($connect, $req);
     
     
 } else {
@@ -32,8 +28,7 @@ $str_pag = ceil($counter / $num);
     </section>
     <section class="shop__list">
       <?php 
-        if($products){
-          
+        if($products){          
           showProducts($products);
         }         
       ?>

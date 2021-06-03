@@ -80,7 +80,6 @@ $('#sortOrder').change(function (e) {
   e.preventDefault();
   let query = makeReq()
   sendReq(query)
-
 })
 
 // выбор категории товаров

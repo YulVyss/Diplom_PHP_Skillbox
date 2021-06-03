@@ -36,10 +36,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom//include/functions.php';
         <a class="main-menu__item active" href="/php_diplom/">Главная</a>
       </li>
       <li>
-        <a class="main-menu__item <?= isCurrentUrl('/php_diplom/?new=1') ? 'active' : '' ?>" href="/php_diplom/?new=1">Новинки </a>
+        <a class="main-menu__item <?= isCurrentUrl('/php_diplom/new.php') ? 'active' : '' ?>" href="/php_diplom/new.php">Новинки </a>
       </li>
       <li>
-        <a class="main-menu__item <?= isCurrentUrl('/php_diplom/?sale=1') ? 'active' : '' ?>" href="/php_diplom/?sale=1">Sale</a>
+        <a class="main-menu__item <?= isCurrentUrl('/php_diplom/sale.php') ? 'active' : '' ?>" href="/php_diplom/sale.php">Sale</a>
       </li>
       <li>
         <a class="main-menu__item" href="/php_diplom/delivery.php">Доставка</a>

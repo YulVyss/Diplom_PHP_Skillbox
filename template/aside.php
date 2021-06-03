@@ -15,19 +15,19 @@
               <a class="filter__list-item active" href="all" name=0>ВсеВсеВсе</a>
             </li>
             <li>
-              <a class="filter__list-item" href="women.php" name="1">Женщины</a>
+              <a class="filter__list-item" href="/php_diplom/?category=1" name="1">Женщины</a>
             </li>
             <li>
-              <a class="filter__list-item" href="men.php" name="2">Мужчины</a>
+              <a class="filter__list-item" href="/php_diplom/?category=2" name="2">Мужчины</a>
             </li>
             <li>
-              <a class="filter__list-item" href="kids.php" name="3">Дети</a>
+              <a class="filter__list-item" href="/php_diplom/?category=3" name="3">Дети</a>
             </li>
             <li>
-              <a class="filter__list-item" href="accessories.php" name="4">Аксессуары</a>
+              <a class="filter__list-item" href="/php_diplom/?category=4" name="4">Аксессуары</a>
             </li>
             <li>
-              <a class="filter__list-item" href="/php_diplom/shoes.php" name="5">Обувь</a>
+              <a class="filter__list-item" href="/php_diplom/?category=5" name="5">Обувь</a>
             </li>
           </ul>
         </div>
