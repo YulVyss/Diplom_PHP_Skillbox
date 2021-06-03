@@ -1,4 +1,4 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header.php'; ?>
+<!-- <?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header.php'; ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/aside.php'; ?>
 
       <section class="shop__list">
@@ -130,4 +130,4 @@
 
 
 </html>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php'; ?> -->

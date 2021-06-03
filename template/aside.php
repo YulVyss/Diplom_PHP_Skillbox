@@ -2,7 +2,7 @@
   <header class="intro">
     <div class="intro__wrapper">
       <h1 class=" intro__title">COATS</h1>
-      <p class="intro__info">Collection 2018</p>
+      <p class="intro__info">Collection 2021</p>
     </div>
   </header>
   <section class="shop container">
@@ -27,7 +27,7 @@
               <a class="filter__list-item" href="accessories.php" name="4">Аксессуары</a>
             </li>
             <li>
-              <a class="filter__list-item" href="shoes.php" name="5">Обувь</a>
+              <a class="filter__list-item" href="/php_diplom/shoes.php" name="5">Обувь</a>
             </li>
           </ul>
         </div>
@@ -70,5 +70,5 @@
             <option value="reverse">По убыванию</option>
           </select>
         </div>
-        <p class="shop__sorting-res">Найдено <span class="res-sort"></span> моделей</p>
-      </section>
+        <!-- <p class="shop__sorting-res">Найдено <span class="res-sort"><?=getCounter($page, $connect);?></span> моделей</p>
+      </section> -->

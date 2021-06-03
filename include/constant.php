@@ -12,3 +12,8 @@ $bdname = 'fashion'; // название БД
 $login = $_SESSION['current_login'] ?? '';
 
 $counter = 0;
+
+$start = 0;
+$num = 3;
+$page = 1;
+

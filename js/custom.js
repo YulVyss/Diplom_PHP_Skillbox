@@ -64,12 +64,13 @@ $("#authorization").submit(function (e) {
   })
 })
 
-function getCounter() {
-  let productsOnPage = document.querySelectorAll('.product')
-  let counter = productsOnPage.length
-  document.querySelector(".res-sort").innerHTML = counter
-}
-getCounter()
+// function getCounter() {
+//   let productsOnPage = document.querySelectorAll('.product')
+//   let counter = productsOnPage.length
+//   document.querySelector(".res-sort").innerHTML = counter
+//   console.log(document.querySelectorAll('.product').length)
+// }
+// getCounter()
 
 // сортировка товаров
 
@@ -77,8 +78,9 @@ let filter = '';
 
 $('#sortOrder').change(function (e) {
   e.preventDefault();
-  makeReq()
-  sendReq(filter)
+  let query = makeReq()
+  sendReq(query)
+
 })
 
 // выбор категории товаров
@@ -98,7 +100,6 @@ $('.filter__list-item').click(function (e) {
   $('#sale').attr('checked', false);
   $('#new').attr('checked', false);
   sendReq(filter)
-  filter = ''
 })
 
 
@@ -106,45 +107,84 @@ $('.filter__list-item').click(function (e) {
 
 $('#filter-button').click(function (e) {
   e.preventDefault()
-  makeReq()
-  sendReq(filter)
-  filter = ''
+  let query = makeReq()
+  sendReq(query)
+  // getCounter()
 })
 
 // отправка запроса в БД
-function sendReq(filter) {
+function sendReq(query) {
   $.ajax({
     url: '/php_diplom/include/productsFilter.php',
-    data: filter,
+    data: query,
     type: 'get',
+
     success: function (html) {
       $('.shop__list').html(html).hide().fadeIn(1000);
+
+      $('.res-sort').text($('.counter').text());
+      let total = $('.res-sort').text()
+
+      let pages = Math.ceil(total / 3)
+
+      $('.shop__paginator.paginator').html(showPagination(pages, query))
     }
   })
 }
 
 // собираем GET запрос
 function makeReq() {
+  let page = ($('.paginator__item.active').html() !== undefined) ? $('.paginator__item.active').html() : 1
 
   let category = document.querySelector('.filter__list-item.active').getAttribute('name')
-  filter += `category=${category}`
+  // filter = `category=${category}`
   let minP = parseInt($('.min-price').text())
   let maxP = parseInt($('.max-price').text())
-  filter += '&min=' + minP + '&max=' + maxP
+  // filter += '&min=' + minP + '&max=' + maxP
   let filtNew = 0
   let filtSale = 0
   if ($('#new').is(':checked')) {
-    filter += '&new=' + 1
+    filtNew = 1
   }
   if ($('#sale').is(':checked')) {
-    filter += '&sale=' + 1
+    filtSale = 1
   }
 
   let sort = $('#sortBy').val()
   let order = $('#sortOrder').val()
-  if (sort !== 'Сортировка' && order !== 'Порядок') {
-    filter += '&sort=' + sort + '&order=' + order
+  if (sort == 'Сортировка' && order == 'Порядок') {
+    sort = ''
+    order = ''
   }
-  // console.log(filter)
-  return filter
+  // filter += '&page=' + page
+  filter = {
+    // 'page': page,
+    'category': category,
+    'min': minP,
+    'max': maxP,
+    'new': filtNew,
+    'sale': filtSale,
+    'sort': sort,
+    'order': order,
+  }
+  let esc = encodeURIComponent;
+  let query = Object.keys(filter)
+    .map(k => esc(k) + '=' + esc(filter[k]))
+    .join('&');
+  console.log(query)
+  return query
 }
+function showPagination(num, query) {
+  let ul = document.querySelector('.shop__paginator.paginator')
+  ul.innerHTML = ''
+  for (let i = 1; i <= num; i++) {
+    let li = document.createElement('li')
+    let a = document.createElement('a')
+    a.setAttribute('href', '/php_diplom/?page=' + i + '&' + query)
+    a.classList.add('paginator__item')
+    a.innerHTML = i
+    li.appendChild(a)
+    ul.appendChild(li)
+  }
+}
+

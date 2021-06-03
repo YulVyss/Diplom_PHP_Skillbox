@@ -715,8 +715,10 @@ a:focus {
   border: 1px solid #ebebeb;
   width: 270px;
   height: 362px;
+  overflow: hidden;
 }
 .product img {
+  width: 100%;
   -o-object-fit: cover;
   object-fit: cover;
 }
@@ -757,7 +759,8 @@ a:focus {
   color: #787b7f;
 }
 .paginator__item[href]:hover,
-.paginator__item[href]:focus {
+.paginator__item[href]:focus,
+.paginator__item.active {
   color: #fff;
   border-color: #e45446;
   background-color: #e45446;

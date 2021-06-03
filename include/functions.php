@@ -1,6 +1,7 @@
 <?php
 
 $connect = mysqli_connect($host, $user, $password, $bdname);
+$counter = 0;
 // создать пользователя (без вывода на сайте)
 function createUser($connect, $name, $login, $password) {
     $password = password_hash($password, PASSWORD_DEFAULT);
@@ -20,33 +21,35 @@ function createUser($connect, $name, $login, $password) {
 
 
 // получить из БД все продукты 
-function getAllProducts($connect) {
+function getAllProducts($connect, $num, $start) {
+   
+
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        return mysqli_query($connect, "SELECT * from products ");
+        return mysqli_query($connect, "SELECT * from products LIMIT $num OFFSET $start");
     }
 }
-// получить из БД продукты сортированные по 
-function getSortedProducts($connect, $sort) {
-    if (mysqli_connect_errno()) {
-        $err = "Ошибка ".mysqli_connect_error();
-        exit();
-    } else {
-        return mysqli_query($connect, "SELECT * from products  ORDER BY $sort");
-    }
-}
+// // получить из БД продукты сортированные по 
+// function getSortedProducts($connect, $sort) {
+//     if (mysqli_connect_errno()) {
+//         $err = "Ошибка ".mysqli_connect_error();
+//         exit();
+//     } else {
+//         return mysqi_query($connect, "SELECT * from products  ORDER BY $sort");
+//     }
+// }
 
 
 // сортировка всех продуктов на главной странице
 
-function sortProducts($a, $b) {
-    return $a['sort'] > $b['sort'];
-}
-function sortByPrice($products) {
-    usort($products, sortProducts($price));  
-}
+// function sortProducts($a, $b) {
+//     return $a['sort'] > $b['sort'];
+// }
+// function sortByPrice($products) {
+//     usort($products, sortProducts($price));  
+// }
 
 // получение всех новинок или распродаж
 function getNewProducts($connect, $filter) {
@@ -67,24 +70,15 @@ function getNewSaleProducts($connect) {
         return mysqli_query($connect, "SELECT * from products where sale=1 and new=1");  
     }
 }
-// // фильтрация товаров по категориям
-// function getFilterCategoryProducts($connect, $category) {
-//     if (mysqli_connect_errno()) {
-//         $err = "Ошибка ".mysqli_connect_error();
-//         exit();
-//     } else {
-//         $products = mysqli_query($connect, "SELECT * from products where category_id=$category");
-//         showProducts($products);
-//     }
-//     mysqli_close($connect);
-// }
+
 // вывод продуктов на главной странице
 function showProducts($products) {
+
     while($row = mysqli_fetch_assoc($products)) { 
         $img = $row['img'];
         $name = $row['name'];
         $price = $row['price']; 
-        getCounter($counter);
+        // getCounter($counter);
         ?>
     <article class="shop__item product" tabindex="0">
         <div class="product__image">
@@ -95,18 +89,18 @@ function showProducts($products) {
         <span class="product__new"><?= $row['new'] == 1 ? 'new' : ''?></span>
         <span class="product__sale"><?= $row['sale'] == 1 ? 'sale' : ''?></span>
     </article>
-<?php } 
+<?php 
+    } 
+    // return $counter;
 }
+
+
 // получение названия категории
 function getSection($connect, $section){
     $section_names = mysqli_query($connect, "SELECT name from sections where id='$section' LIMIT 1");
         while($row = mysqli_fetch_assoc($section_names)) {
             return $row['name'];
         }
-}
-
-function getCounter($counter){
-    return $counter++;
 }
 
 // администратор
@@ -125,7 +119,7 @@ function showProductsAdm($connect, $products) {
         } else {
             $new='Нет';
         }
-?>
+    ?>
     <li class="product-item page-products__item">
       <b class="product-item__name"><?=$name?></b>
       <span class="product-item__field"><?=$ID?></span>
@@ -170,3 +164,138 @@ function addNewProduct($connect, $name, $price, $photo, $section, $new, $sale) {
   }
 
 
+// фильтрация товаров
+function getFilterCategoryProducts($connect, $param="SELECT * from products ") {
+    if (mysqli_connect_errno()) {
+        $err = "Ошибка ".mysqli_connect_error();
+        exit();
+    } else {
+        return mysqli_query($connect, $param);
+    }
+    mysqli_close($connect);
+    exit();
+}
+
+
+function isCurrentUrl($url){
+    return $url == $_SERVER['REQUEST_URI'];
+}
+
+function getCounter($connect, $param = 'SELECT COUNT(*) FROM products '){
+    $res = mysqli_query($connect, $param);
+    $row = mysqli_fetch_assoc($res);
+    $counter = $row["COUNT(*)"];
+    return $counter;
+}
+
+function build_http_query( $query ){
+
+    $query_array = [];
+    foreach( $query as $key => $value ){
+        $query_array[] = urlencode( $key ) . '=' . urlencode( $value );
+    }
+    return implode( ' ', $query_array );
+}
+function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
+    if(($data['page'])){
+        $start = ($data['page'] * $num) - $num;
+    } else {
+        $start = 0;
+    }
+    
+    $req = $reqStart;
+   
+    if(isset($data['category'])){  
+        $req .= 'where '; 
+        
+        $category = $data['category']?? 0;
+        $min = $data['min']?? 0;
+        $max = $data['max']?? 100000;
+        $saleP = $data['sale']?? 0;
+        $newP = $data['new']?? 0;
+        if($category>0){
+            $req .= 'category_id='.$category . " and ";
+       
+        } 
+        
+        if($saleP>0){
+            $req .= 'sale='.$saleP." and ";
+        }
+
+        if($newP>0){
+            $req .= 'new='.$newP. " and ";
+        }    
+        $req .= ' price between '.$min.' and '.$max;        
+    }  
+    
+    
+    if($data['sort'] > 0){
+        if($data['sort'] == 'sortByName' && $data['order'] == 'on'){
+            $req .= " ORDER BY name ASC ";
+        } elseif($data['sort'] == 'sortByName' && $data['order'] == 'reverse'){
+            $req .= " ORDER BY name DESC ";
+        } elseif($data['sort'] == 'sortByPrice' && $data['order'] == 'on'){
+            $req .= " ORDER BY price ASC ";
+        } else{
+            $req .= " ORDER BY price DESC ";
+        }
+    }
+    if($reqStart !== "SELECT COUNT(*) from products "){
+        if($start > 0){
+            $req .= " LIMIT $num OFFSET $start";
+        } else {
+            $req .= " LIMIT $num";
+        }
+    }
+    
+    
+    return $req;
+}
+
+
+
+// function getCategoryRequest($data, $category, $regS, $start){
+//     $start = ($data['page'] * $num) - $num;
+//     $req = $regS;   
+    
+//     if(isset($data['category'])){  
+//         $req .= 'where ';
+//         $category = $data['category']?? 0;
+//         $min = $data['min']?? 0;
+//         $max = $data['max']?? 100000;
+//         $saleP = $data['sale']?? 0;
+//         $newP = $data['new']?? 0;
+//         if($category>0){
+//             $req .= 'category_id='.$category . " and ";
+//         } 
+        
+//         if($saleP>0){
+//             $req .= 'sale='.$saleP." and ";
+//         }
+
+//         if($newP>0){
+//             $req .= 'new='.$newP. " and ";
+//         }    
+//         $req .= ' price between '.$min.' and '.$max;        
+//     }  
+    
+    
+//     if(isset($data['sort'])){
+//         if($data['sort'] == 'sortByName' && $data['order'] == 'on'){
+//             $req .= " ORDER BY name ASC ";
+//         } elseif($data['sort'] == 'sortByName' && $data['order'] == 'reverse'){
+//             $req .= " ORDER BY name DESC ";
+//         } elseif($data['sort'] == 'sortByPrice' && $data['order'] == 'on'){
+//             $req .= " ORDER BY price ASC ";
+//         } else{
+//             $req .= " ORDER BY price DESC ";
+//         }
+//     }
+//     if($start > 0){
+//         $req .= " LIMIT $num OFFSET $start";
+//     } else {
+//         $req .= " LIMIT $num";
+//     }
+//     echo $req;
+//     // return $req;
+// }
