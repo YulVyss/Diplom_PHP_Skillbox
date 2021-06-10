@@ -1,4 +1,4 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header_adm.php'; 
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php'; 
 
 ?>
 <main class="page-authorization">
@@ -12,8 +12,7 @@
 <?php } ?>
     <input type="password" class="custom-form__input" required name="current_password" value="<?= $current_password ?>">
     <button class="button" type="submit">Войти в личный кабинет</button>
-    <!-- <a href="/php_diplom/products/" class="button">личный кабинет</a> -->
   </form>
 </main>
 <div class="response"></div>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php';
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php';

@@ -1,8 +1,9 @@
 <?php 
 include $_SERVER['DOCUMENT_ROOT'] . '/template/header.php'; 
 include $_SERVER['DOCUMENT_ROOT'] . '/template/aside.php'; 
-$re = $_SERVER['REQUEST_URI'];
 
+$re = $_SERVER['REQUEST_URI'];
+$counter = getCounter($connect, 'SELECT COUNT(*) FROM products where new=1 ');
 if($_GET){  
   $req = getRequest($_GET, $num, $start, "SELECT * from products ");
 }
@@ -19,17 +20,16 @@ if(($_GET['page'])){
   $products = getAllProducts($connect, $num, $start);
 }
 $str_pag = ceil($counter / $num);
-
 ?>
-      <p class="shop__sorting-res">Найдено <span class="res-sort"><?=$counter;?></span> моделей</p>
-    </section>
-    <section class="shop__list">
+      
+        <p class="shop__sorting-res">Найдено <span class="res-sort"><?=$counter;?></span> моделей</p>
+      </section>
+      <section class="shop__list">
       <?php 
-        if($products){          
-          showProducts($products);
-        }         
+        $products = getSaleNewProducts($connect, 'new=1', $num, $start);
+        showProducts($products);      
       ?>
-    </section>
+      </section>
       <ul class="shop__paginator paginator">
         <?php        
           for ($i = 1; $i <= $str_pag; $i++){
@@ -51,4 +51,4 @@ $str_pag = ceil($counter / $num);
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/template/order.php'; ?>
 </main>
 </html>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php'; ?> -->

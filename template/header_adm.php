@@ -1,8 +1,8 @@
 <?php 
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/session.start.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/constant.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/functions.php';
-// include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/login.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/include/session.start.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
+// include $_SERVER['DOCUMENT_ROOT'] . '/include/login.php';
 
 ?>
 <!DOCTYPE html>
@@ -30,18 +30,18 @@ include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/functions.php';
 <body>
 <header class="page-header">
   <a class="page-header__logo" href="#">
-    <img src="/php_diplom/img/logo.svg" alt="Fashion">
+    <img src="/img/logo.svg" alt="Fashion">
   </a>
   <nav class="page-header__menu">
     <ul class="main-menu main-menu--header">
       <li>
-        <a class="main-menu__item" href="/php_diplom/">Главная</a>
+        <a class="main-menu__item" href="/">Главная</a>
       </li>
       <li>
-        <a class="main-menu__item" href="/php_diplom/products/">Товары</a>
+        <a class="main-menu__item" href="/products/">Товары</a>
       </li>
       <li>
-        <a class="main-menu__item" href="/php_diplom/products/orders.php">Заказы</a>
+        <a class="main-menu__item" href="/products/orders.php">Заказы</a>
       </li>
       <li>
         <a class="main-menu__item" href="?logout=on">Выйти</a>

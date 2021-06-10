@@ -1,4 +1,3 @@
-// let url = 'form.php'
 let form = document.getElementById('addProduct')
 let btn = document.querySelector('.addProduct')
 
@@ -23,7 +22,6 @@ $("#addProduct").submit(function (e) {
       const popupEnd = document.querySelector('.page-add__popup-end')
       prodName.innerHTML = `${data}`
       popupEnd.hidden = false;
-      // console.log('продукт ' + data + ' добавлен в каталог')
     },
     error: function (jqXHR, textStatus, errorThrown) {
       console.log('ERROR ' + errorThrown + jqXHR);
@@ -51,11 +49,10 @@ $("#authorization").submit(function (e) {
       if (data == 'false') {
         response.innerHTML = 'не верно введен логин и/или пароль, попробуйте снова'
       } else if (data === 1) {
-        document.location.href = "/php_diplom/products/index.php";
+        document.location.href = "/products/index.php";
       } else {
-        document.location.href = "/php_diplom/products/orders.php";
+        document.location.href = "/products/orders.php";
       }
-
     },
     error: function (jqXHR, textStatus, errorThrown) {
       response.innerHTML = 'произошла ошибка, попробуйте снова'
@@ -64,20 +61,13 @@ $("#authorization").submit(function (e) {
   })
 })
 
-// function getCounter() {
-//   let productsOnPage = document.querySelectorAll('.product')
-//   let counter = productsOnPage.length
-//   document.querySelector(".res-sort").innerHTML = counter
-//   console.log(document.querySelectorAll('.product').length)
-// }
-// getCounter()
 
 // сортировка товаров
-
 let filter = '';
 
 $('#sortOrder').change(function (e) {
   e.preventDefault();
+  clearUrl()
   let query = makeReq()
   sendReq(query)
 })
@@ -85,7 +75,9 @@ $('#sortOrder').change(function (e) {
 // выбор категории товаров
 $('.filter__list-item').click(function (e) {
   e.preventDefault();
+  clearUrl()
 
+  $('.active').removeClass('active');
   $(this).addClass('active');
   let category = this.getAttribute('name')
   if (category > 0) {
@@ -103,30 +95,26 @@ $('.filter__list-item').click(function (e) {
 
 
 // фильтрация товаров по кнопке 'Применить'
-
 $('#filter-button').click(function (e) {
   e.preventDefault()
   let query = makeReq()
   sendReq(query)
-  // getCounter()
 })
 
 // отправка запроса в БД
 function sendReq(query) {
   $.ajax({
-    url: '/php_diplom/include/productsFilter.php',
+    url: '/include/productsFilter.php',
     data: query,
     type: 'get',
 
     success: function (html) {
       $('.shop__list').html(html).hide().fadeIn(1000);
-
       $('.res-sort').text($('.counter').text());
       let total = $('.res-sort').text()
-
       let pages = Math.ceil(total / 3)
-
       $('.shop__paginator.paginator').html(showPagination(pages, query))
+      $('.paginator__item').first().addClass('active')
     }
   })
 }
@@ -136,10 +124,8 @@ function makeReq() {
   let page = ($('.paginator__item.active').html() !== undefined) ? $('.paginator__item.active').html() : 1
 
   let category = document.querySelector('.filter__list-item.active').getAttribute('name')
-  // filter = `category=${category}`
   let minP = parseInt($('.min-price').text())
   let maxP = parseInt($('.max-price').text())
-  // filter += '&min=' + minP + '&max=' + maxP
   let filtNew = 0
   let filtSale = 0
   if ($('#new').is(':checked')) {
@@ -155,9 +141,7 @@ function makeReq() {
     sort = ''
     order = ''
   }
-  // filter += '&page=' + page
   filter = {
-    // 'page': page,
     'category': category,
     'min': minP,
     'max': maxP,
@@ -179,11 +163,47 @@ function showPagination(num, query) {
   for (let i = 1; i <= num; i++) {
     let li = document.createElement('li')
     let a = document.createElement('a')
-    a.setAttribute('href', '/php_diplom/?page=' + i + '&' + query)
+    a.setAttribute('href', '/?page=' + i + '&' + query)
     a.classList.add('paginator__item')
     a.innerHTML = i
     li.appendChild(a)
     ul.appendChild(li)
   }
+}
+
+$('.new').click(function (e) {
+  e.preventDefault()
+  clearUrl()
+  $('#new').attr('checked', 'checked')
+  filtNew = 1
+  filter = {
+    'category': 0,
+    'new': filtNew,
+  }
+  let esc = encodeURIComponent;
+  let query = Object.keys(filter)
+    .map(k => esc(k) + '=' + esc(filter[k]))
+    .join('&');
+  sendReq(query)
+})
+$('.sale').click(function (e) {
+  clearUrl()
+  e.preventDefault()
+  $('#sale').attr('checked', 'checked')
+  filtSale = 1
+  filter = {
+    'category': 0,
+    'sale': filtSale,
+  }
+  let esc = encodeURIComponent;
+  let query = Object.keys(filter)
+    .map(k => esc(k) + '=' + esc(filter[k]))
+    .join('&');
+  sendReq(query)
+})
+
+function clearUrl() {
+  baseUrl = window.location.href.split("?")[0];
+  window.history.pushState('/', '', baseUrl);
 }
 

@@ -1,3 +1,20 @@
+<?php
+
+function getSectionList($connect) {
+  $result = mysqli_query($connect, "SELECT * from sections");
+  while($row = mysqli_fetch_assoc($result)) { 
+    if($_GET['category'] == $row['id']){
+      $active = 'active';
+    } else{
+      $active = 'AAA';
+    }
+    ?>
+    <li>
+      <a class="filter__list-item <?=$active?>" href="/?category=<?=$row['id']?>" name="<?=$row['id']?>"><?=$row['name']?></a>
+    </li>
+  <?php }
+}
+?>
 <main class="shop-page">
   <header class="intro">
     <div class="intro__wrapper">
@@ -11,24 +28,17 @@
         <div class="filter__wrapper">
           <b class="filter__title">Категории</b>
           <ul class="filter__list">
-            <li>
-              <a class="filter__list-item active" href="all" name=0>ВсеВсеВсе</a>
-            </li>
-            <li>
-              <a class="filter__list-item" href="/php_diplom/?category=1" name="1">Женщины</a>
-            </li>
-            <li>
-              <a class="filter__list-item" href="/php_diplom/?category=2" name="2">Мужчины</a>
-            </li>
-            <li>
-              <a class="filter__list-item" href="/php_diplom/?category=3" name="3">Дети</a>
-            </li>
-            <li>
-              <a class="filter__list-item" href="/php_diplom/?category=4" name="4">Аксессуары</a>
-            </li>
-            <li>
-              <a class="filter__list-item" href="/php_diplom/?category=5" name="5">Обувь</a>
-            </li>
+          <?php
+            if(isset($_GET['category'])){ ?>               
+                <li>
+                  <a class="filter__list-item" href="all" name=0>ВсеВсеВсе</a>
+                </li>
+            <?php  } else { ?>
+              <li>
+                <a class="filter__list-item active" href="all" name=0>ВсеВсеВсе</a>
+              </li>
+            <?php } 
+            getSectionList($connect); ?>            
           </ul>
         </div>
         <div class="filter__wrapper">
@@ -70,5 +80,4 @@
             <option value="reverse">По убыванию</option>
           </select>
         </div>
-        <!-- <p class="shop__sorting-res">Найдено <span class="res-sort"><?=getCounter($page, $connect);?></span> моделей</p>
-      </section> -->
+        

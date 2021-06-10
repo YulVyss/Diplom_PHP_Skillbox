@@ -1,9 +1,9 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header_adm.php'; 
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php'; 
 
 ?>
 <main class="page-products">
   <h1 class="h h--1">Товары</h1>
-  <a class="page-products__button button" href="/php_diplom/products/add.php">Добавить товар</a>
+  <a class="page-products__button button" href="/products/add.php">Добавить товар</a>
   <div class="page-products__header">
     <span class="page-products__header-field">Название товара</span>
     <span class="page-products__header-field">ID</span>
@@ -17,4 +17,4 @@
     showProductsAdm($connect, $products);  ?>
   </ul>
 </main>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php';
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php';

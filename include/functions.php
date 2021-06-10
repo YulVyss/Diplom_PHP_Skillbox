@@ -22,8 +22,6 @@ function createUser($connect, $name, $login, $password) {
 
 // получить из БД все продукты 
 function getAllProducts($connect, $num, $start) {
-   
-
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
@@ -54,12 +52,10 @@ function getNewSaleProducts($connect) {
 
 // вывод продуктов на главной странице
 function showProducts($products) {
-
     while($row = mysqli_fetch_assoc($products)) { 
         $img = $row['img'];
         $name = $row['name'];
         $price = $row['price']; 
-        // getCounter($counter);
         ?>
     <article class="shop__item product" tabindex="0">
         <div class="product__image">
@@ -72,7 +68,6 @@ function showProducts($products) {
     </article>
 <?php 
     } 
-    // return $counter;
 }
 
 
@@ -170,39 +165,33 @@ function getCounter($connect, $param = 'SELECT COUNT(*) FROM products '){
 }
 
 function build_http_query( $query ){
-
     $query_array = [];
     foreach( $query as $key => $value ){
         $query_array[] = urlencode( $key ) . '=' . urlencode( $value );
     }
-    return implode( ' ', $query_array );
+    return implode( '&', $query_array );
 }
 function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
     if(($data['page'])){
         $start = ($data['page'] * $num) - $num;
     } else {
         $start = 0;
-    }
-    
+    }    
     $req = $reqStart;
    
     if(isset($data['category'])){  
-        $req .= 'where '; 
-        
+        $req .= 'where ';         
         $category = $data['category']?? 0;
         $min = $data['min']?? 0;
         $max = $data['max']?? 100000;
         $saleP = $data['sale']?? 0;
         $newP = $data['new']?? 0;
         if($category>0){
-            $req .= 'category_id='.$category . " and ";
-       
-        } 
-        
+            $req .= 'category_id='.$category . " and ";       
+        }         
         if($saleP>0){
             $req .= 'sale='.$saleP." and ";
         }
-
         if($newP>0){
             $req .= 'new='.$newP. " and ";
         }    
@@ -233,50 +222,3 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
     return $req;
 }
 
-
-
-// function getCategoryRequest($data, $category, $regS, $start){
-//     $start = ($data['page'] * $num) - $num;
-//     $req = $regS;   
-    
-//     if(isset($data['category'])){  
-//         $req .= 'where ';
-//         $category = $data['category']?? 0;
-//         $min = $data['min']?? 0;
-//         $max = $data['max']?? 100000;
-//         $saleP = $data['sale']?? 0;
-//         $newP = $data['new']?? 0;
-//         if($category>0){
-//             $req .= 'category_id='.$category . " and ";
-//         } 
-        
-//         if($saleP>0){
-//             $req .= 'sale='.$saleP." and ";
-//         }
-
-//         if($newP>0){
-//             $req .= 'new='.$newP. " and ";
-//         }    
-//         $req .= ' price between '.$min.' and '.$max;        
-//     }  
-    
-    
-//     if(isset($data['sort'])){
-//         if($data['sort'] == 'sortByName' && $data['order'] == 'on'){
-//             $req .= " ORDER BY name ASC ";
-//         } elseif($data['sort'] == 'sortByName' && $data['order'] == 'reverse'){
-//             $req .= " ORDER BY name DESC ";
-//         } elseif($data['sort'] == 'sortByPrice' && $data['order'] == 'on'){
-//             $req .= " ORDER BY price ASC ";
-//         } else{
-//             $req .= " ORDER BY price DESC ";
-//         }
-//     }
-//     if($start > 0){
-//         $req .= " LIMIT $num OFFSET $start";
-//     } else {
-//         $req .= " LIMIT $num";
-//     }
-//     echo $req;
-//     // return $req;
-// }

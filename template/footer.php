@@ -1,21 +1,21 @@
 <footer class="page-footer">
   <div class="container">
-    <a class="page-footer__logo" href="/php_diplom/">
-      <img src="/php_diplom/img/logo--footer.svg" alt="Fashion">
+    <a class="page-footer__logo" href="/">
+      <img src="/img/logo--footer.svg" alt="Fashion">
     </a>
     <nav class="page-footer__menu">
       <ul class="main-menu main-menu--footer">
         <li>
-          <a class="main-menu__item" href="/php_diplom/">Главная</a>
+          <a class="main-menu__item" href="/">Главная</a>
         </li>
         <li>
-          <a class="main-menu__item" href="/php_diplom/new.php">Новинки</a>
+          <a class="main-menu__item" href="/new.php">Новинки</a>
         </li>
         <li>
-          <a class="main-menu__item" href="/php_diplom/sale.php">Sale</a>
+          <a class="main-menu__item" href="/sale.php">Sale</a>
         </li>
         <li>
-          <a class="main-menu__item" href="/php_diplom/delivery.php">Доставка</a>
+          <a class="main-menu__item" href="/delivery.php">Доставка</a>
         </li>
       </ul>
     </nav>

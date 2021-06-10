@@ -1,5 +1,7 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header.php'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/aside.php'; ?>
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/template/header.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/template/aside.php'; 
+?>
 
 
       <section class="shop__list">
@@ -18,7 +20,7 @@
       </ul>
     </div>
   </section>
-  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/order.php'; ?>
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/template/order.php'; ?>
 </main>
 </html>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php'; ?>

@@ -6,5 +6,5 @@ if (!isset($_SESSION['time'])) {
 if (isset($_GET['logout']) && $_GET['logout'] == 'on') {
     // удаляем все куки
     session_unset();
-    header('Location: /php_diplom/index.php');
+    header('Location: /index.php');
 }

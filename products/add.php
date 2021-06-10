@@ -1,9 +1,9 @@
 <?php 
 if (!isset($_COOKIE['authorized'])) {
-  header("Location: /php_diplom/admin/index.php"); 
+  header("Location: //admin/index.php"); 
   exit();
 }
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header_adm.php'; 
+include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php'; 
 
 ?>
 <main class="page-add">
@@ -57,4 +57,4 @@ include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header_adm.php';
     </div>
   </section>
 </main>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php'; ?>

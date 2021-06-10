@@ -1,4 +1,4 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/header.php'; ?>
 
   <main class="page-delivery">
     <h1 class="h h--1">Доставка</h1>
@@ -49,4 +49,4 @@
       <a class="page-delivery__button button" href="index.php">Продолжить покупки</a>
     </section>
   </main>
-  <?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php'; ?>
+  <?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php'; ?>

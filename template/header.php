@@ -1,7 +1,7 @@
 <?php 
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/session.start.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom//include/constant.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom//include/functions.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/include/session.start.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
 
 
 ?>
@@ -33,18 +33,18 @@ include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom//include/functions.php';
   <nav class="page-header__menu">
     <ul class="main-menu main-menu--header">
       <li>
-        <a class="main-menu__item active" href="/php_diplom/">Главная</a>
+        <a class="main-menu__item active" href="/">Главная</a>
       </li>
       <li>
-        <a class="main-menu__item <?= isCurrentUrl('/php_diplom/new.php') ? 'active' : '' ?>" href="/php_diplom/new.php">Новинки </a>
+        <a class="main-menu__item new <?= isCurrentUrl('/new.php') ? 'active' : '' ?>" href="/new.php">Новинки </a>
       </li>
       <li>
-        <a class="main-menu__item <?= isCurrentUrl('/php_diplom/sale.php') ? 'active' : '' ?>" href="/php_diplom/sale.php">Sale</a>
+        <a class="main-menu__item sale <?= isCurrentUrl('/sale.php') ? 'active' : '' ?>" href="/sale.php">Sale</a>
       </li>
       <li>
-        <a class="main-menu__item" href="/php_diplom/delivery.php">Доставка</a>
+        <a class="main-menu__item" href="/delivery.php">Доставка</a>
       </li>
     </ul>
   </nav>
-  <a href="/php_diplom/admin/index.php" class="authorization main-menu__item">Войти</a>
+  <a href="/admin/index.php" class="authorization main-menu__item">Войти</a>
 </header>

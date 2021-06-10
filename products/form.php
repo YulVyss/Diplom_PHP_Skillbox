@@ -1,6 +1,6 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/constant.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/login.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/include/login.php';
 
 if(isset($_POST)) {
 

@@ -506,6 +506,7 @@ a:focus {
 .filter__list-item {
   color: #787b7f;
   transition: all 300ms;
+  text-transform: capitalize;
 }
 .filter__list-item[href]:hover,
 .filter__list-item[href]:focus {

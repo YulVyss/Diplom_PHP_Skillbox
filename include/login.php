@@ -1,6 +1,6 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/constant.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/include/functions.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/include/constant.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
 
 $isAuth = false;
 $current_login = htmlspecialchars($_POST['current_login'] ?? '');

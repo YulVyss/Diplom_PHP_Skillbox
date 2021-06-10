@@ -1,4 +1,4 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/header_adm.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php'; ?>
 <main class="page-order">
   <h1 class="h h--1">Список заказов</h1>
   <ul class="page-order__list">
@@ -100,4 +100,4 @@
     </li>
   </ul>
 </main>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom/template/footer.php';
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php';

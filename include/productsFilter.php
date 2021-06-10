@@ -1,9 +1,8 @@
 <?php 
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom//include/constant.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/php_diplom//include/functions.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
 
 // фильтрация товаров
-// var_dump($_GET);
 if(isset($_GET)){   
     $req = getRequest($_GET, $num, $start, "SELECT * from products ");
     
