@@ -24,6 +24,7 @@ $str_pag = ceil($counter / $num);
       <p class="shop__sorting-res">Найдено <span class="res-sort"><?=$counter;?></span> моделей</p>
     </section>
     <section class="shop__list">
+    
       <?php 
         if($products){          
           showProducts($products);

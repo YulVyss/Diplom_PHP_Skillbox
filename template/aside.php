@@ -1,19 +1,6 @@
 <?php
 
-function getSectionList($connect) {
-  $result = mysqli_query($connect, "SELECT * from sections");
-  while($row = mysqli_fetch_assoc($result)) { 
-    if($_GET['category'] == $row['id']){
-      $active = 'active';
-    } else{
-      $active = 'AAA';
-    }
-    ?>
-    <li>
-      <a class="filter__list-item <?=$active?>" href="/?category=<?=$row['id']?>" name="<?=$row['id']?>"><?=$row['name']?></a>
-    </li>
-  <?php }
-}
+
 ?>
 <main class="shop-page">
   <header class="intro">
@@ -29,7 +16,7 @@ function getSectionList($connect) {
           <b class="filter__title">Категории</b>
           <ul class="filter__list">
           <?php
-            if(isset($_GET['category'])){ ?>               
+            if($_GET['category'] > 0){ ?>               
                 <li>
                   <a class="filter__list-item" href="all" name=0>ВсеВсеВсе</a>
                 </li>
@@ -54,9 +41,18 @@ function getSectionList($connect) {
         </div>
 
         <fieldset class="custom-form__group">
-          <input type="checkbox" name="new" id="new" class="custom-form__checkbox">
+        <?php if ($_REQUEST['new'] == 1) { ?>
+          <input type="checkbox" name="new" id="new" class="custom-form__checkbox " checked >
+        <?php } else { ?>
+          <input type="checkbox" name="new" id="new" class="custom-form__checkbox " >
+          <?php } ?>
           <label for="new" class="custom-form__checkbox-label custom-form__info" style="display: block;">Новинка</label>
-          <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox">
+          <?php if ($_REQUEST['sale'] == 1) { ?>
+            <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox" checked>
+          <?php } else { ?>
+            <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox">
+            <?php } ?>
+          
           <label for="sale" class="custom-form__checkbox-label custom-form__info"
             style="display: block;">Распродажа</label>
         </fieldset>
@@ -69,15 +65,16 @@ function getSectionList($connect) {
         <div class="shop__sorting-item custom-form__select-wrapper">
           <select class="custom-form__select" name="category" id="sortBy">
             <option hidden="">Сортировка</option>
-            <option class="option" value="sortByPrice">По цене</option>
-            <option class="option" value="sortByName">По названию</option>
+            <?php echo ($_REQUEST['sort'] == 'sortByPrice') ? '<option class="option" value="sortByPrice" selected>По цене</option>' : '<option class="option" value="sortByPrice">По цене</option>'; ?>
+            <?php echo ($_REQUEST['sort'] == 'sortByName') ? '<option class="option" value="sortByName" selected>По названию</option>' : '<option class="option" value="sortByName">По названию</option>'; ?>
           </select>
         </div>
         <div class="shop__sorting-item custom-form__select-wrapper">
           <select class="custom-form__select" name="prices" id="sortOrder">
             <option hidden="">Порядок</option>
-            <option value="on">По возрастанию</option>
-            <option value="reverse">По убыванию</option>
+            <?php echo ($_REQUEST['order'] == 'on') ? '<option value="on" selected>По возрастанию</option>' : '<option value="on">По возрастанию</option>'; ?>
+            <?php echo ($_REQUEST['order'] == 'reverse') ? '<option value="reverse" selected>По убыванию</option>' : '<option value="reverse">По убыванию</option>'; ?>
+              
           </select>
         </div>
         

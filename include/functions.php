@@ -222,3 +222,19 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
     return $req;
 }
 
+
+function getSectionList($connect) {
+    $result = mysqli_query($connect, "SELECT * from sections");
+    while($row = mysqli_fetch_assoc($result)) { 
+      if($_GET['category'] == $row['id']){
+        $active = 'active';
+      } else{
+        $active = 'AAA';
+      }
+      ?>
+      <li>
+        <a class="filter__list-item <?=$active?>" href="/?category=<?=$row['id']?>" name="<?=$row['id']?>"><?=$row['name']?></a>
+      </li>
+    <?php }
+  
+  }
