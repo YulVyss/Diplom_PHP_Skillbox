@@ -1,5 +1,4 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/template/header.php'; ?>
-
   <main class="page-delivery">
     <h1 class="h h--1">Доставка</h1>
     <p class="page-delivery__desc">

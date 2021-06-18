@@ -6,7 +6,7 @@ if (!isset($_COOKIE['authorized'])) {
 include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
 ?>
 <main class="page-add">  
-  <h1 class="h h--1">Добавление товара</h1>
+  <h1 class="h h--1">Изменение товара</h1>
   <form class="custom-form" action="form.php" id='addProduct'  method="post" enctype="multipart/form-data">
     <fieldset class="page-add__group custom-form__group">
       <legend class="page-add__small-title custom-form__title">Данные о товаре</legend>
@@ -50,8 +50,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
   </form>
   <section class="shop-page__popup-end page-add__popup-end" hidden="">
     <div class="shop-page__wrapper shop-page__wrapper--popup-end">
-      <h2 class="h h--1 h--icon shop-page__end-title">Товар <span class='product__added'></span> успешно добавлен</h2>
-      
+      <h2 class="h h--1 h--icon shop-page__end-title">Товар <span class='product__added'></span> успешно добавлен</h2>      
     </div>
   </section>
 </main>

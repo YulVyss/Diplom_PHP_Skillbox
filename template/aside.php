@@ -1,7 +1,3 @@
-<?php
-
-
-?>
 <main class="shop-page">
   <header class="intro">
     <div class="intro__wrapper">
@@ -17,15 +13,15 @@
           <ul class="filter__list">
           <?php
             if($_GET['category'] > 0){ ?>               
-                <li>
-                  <a class="filter__list-item" href="all" name=0>ВсеВсеВсе</a>
-                </li>
+              <li>
+                <a class="filter__list-item" href="all" name=0>ВсеВсеВсе</a>
+              </li>
             <?php  } else { ?>
               <li>
                 <a class="filter__list-item active" href="all" name=0>ВсеВсеВсе</a>
               </li>
             <?php } 
-            getSectionList($connect); ?>            
+              getSectionList($connect); ?>            
           </ul>
         </div>
         <div class="filter__wrapper">
@@ -39,27 +35,24 @@
             </div>
           </div>
         </div>
-
         <fieldset class="custom-form__group">
         <?php if ($_REQUEST['new'] == 1) { ?>
           <input type="checkbox" name="new" id="new" class="custom-form__checkbox " checked >
         <?php } else { ?>
           <input type="checkbox" name="new" id="new" class="custom-form__checkbox " >
-          <?php } ?>
-          <label for="new" class="custom-form__checkbox-label custom-form__info" style="display: block;">Новинка</label>
-          <?php if ($_REQUEST['sale'] == 1) { ?>
-            <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox" checked>
-          <?php } else { ?>
-            <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox">
-            <?php } ?>
-          
+        <?php } ?>
+        <label for="new" class="custom-form__checkbox-label custom-form__info" style="display: block;">Новинка</label>
+        <?php if ($_REQUEST['sale'] == 1) { ?>
+          <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox" checked>
+        <?php } else { ?>
+          <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox">
+        <?php } ?>          
           <label for="sale" class="custom-form__checkbox-label custom-form__info"
             style="display: block;">Распродажа</label>
         </fieldset>
         <button class="button" type="submit" style="width: 100%" id="filter-button">Применить</button>
       </form>
     </section>
-
     <div class="shop__wrapper">
       <section class="shop__sorting">
         <div class="shop__sorting-item custom-form__select-wrapper">
@@ -73,8 +66,7 @@
           <select class="custom-form__select" name="prices" id="sortOrder">
             <option hidden="">Порядок</option>
             <?php echo ($_REQUEST['order'] == 'on') ? '<option value="on" selected>По возрастанию</option>' : '<option value="on">По возрастанию</option>'; ?>
-            <?php echo ($_REQUEST['order'] == 'reverse') ? '<option value="reverse" selected>По убыванию</option>' : '<option value="reverse">По убыванию</option>'; ?>
-              
+            <?php echo ($_REQUEST['order'] == 'reverse') ? '<option value="reverse" selected>По убыванию</option>' : '<option value="reverse">По убыванию</option>'; ?>              
           </select>
         </div>
         

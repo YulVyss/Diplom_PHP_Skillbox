@@ -1,11 +1,11 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/include/constant.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
 
 $isAuth = false;
 $current_login = htmlspecialchars($_POST['current_login'] ?? '');
 $current_password = htmlspecialchars($_POST['current_password'] ?? '');
-// $conn = mysqli_connect('localhost', 'mysql', 'mysql', 'fashion');
+
 if (!empty($_POST['current_login'] && !empty($_POST['current_password']))) {
      // проверка логина и пароля
     $query = mysqli_query($connect,"SELECT name, login, password, rights FROM users WHERE login ='".mysqli_real_escape_string($connect, $_POST['current_login'])."' LIMIT 1");
@@ -22,13 +22,11 @@ if (!empty($_POST['current_login'] && !empty($_POST['current_password']))) {
         } else {
             echo json_encode($data['name']); 
         }        
-        // header('Location: /php_diplom/products/index.php'); exit;
     } else {
         echo json_encode('false');
     }
-    mysqli_close($connect);
-   
+    mysqli_close($connect);   
 }
-// if (isset($_COOKIE['authorized'])) {
-//     setcookie('authorized', $_COOKIE['authorized'], time() + 60*60*24*30, '/');
-// }
+if (isset($_COOKIE['authorized'])) {
+    setcookie('authorized', $_COOKIE['authorized'], time() + 60*60*24*30, '/');
+}

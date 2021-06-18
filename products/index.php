@@ -1,5 +1,9 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php'; 
+$counter = getCounter($connect, 'SELECT COUNT(*) FROM products ');
 
+if($_POST['id']) {
+  removeProduct($connect, $_POST['id']);
+}
 ?>
 <main class="page-products">
   <h1 class="h h--1">Товары</h1>
@@ -13,7 +17,7 @@
   </div>
   <ul class="page-products__list">
     <?php 
-    $products = getAllProducts($connect);
+    $products = getAllProducts($connect, $counter, 0);
     showProductsAdm($connect, $products);  ?>
   </ul>
 </main>

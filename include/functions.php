@@ -1,7 +1,7 @@
 <?php
-
 $connect = mysqli_connect($host, $user, $password, $bdname);
 $counter = 0;
+
 // создать пользователя (без вывода на сайте)
 function createUser($connect, $name, $login, $password) {
     $password = password_hash($password, PASSWORD_DEFAULT);
@@ -18,9 +18,7 @@ function createUser($connect, $name, $login, $password) {
 // createUser($connect, 'admin', 'admin@fashion.ru', 'admin';
 // createUser($connect, 'operator1', 'operator1@fashion.ru', 'o1p2e3r4');
 
-
-
-// получить из БД все продукты 
+// получение из БД всеч продуктов 
 function getAllProducts($connect, $num, $start) {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
@@ -57,16 +55,16 @@ function showProducts($products) {
         $name = $row['name'];
         $price = $row['price']; 
         ?>
-    <article class="shop__item product" tabindex="0">
-        <div class="product__image">
-        <img src="./img/products/<?=$img?>" alt="product-name">
-        </div>
-        <p class="product__name"><?=$name?></p>
-        <span class="product__price"><?=$price?> руб.</span>
-        <span class="product__new"><?= $row['new'] == 1 ? 'new' : ''?></span>
-        <span class="product__sale"><?= $row['sale'] == 1 ? 'sale' : ''?></span>
-    </article>
-<?php 
+        <article class="shop__item product" tabindex="0">
+            <div class="product__image">
+            <img src="./img/products/<?=$img?>" alt="product-name">
+            </div>
+            <p class="product__name"><?=$name?></p>
+            <span class="product__price"><?=$price?> руб.</span>
+            <span class="product__new"><?= $row['new'] == 1 ? 'new' : ''?></span>
+            <span class="product__sale"><?= $row['sale'] == 1 ? 'sale' : ''?></span>
+        </article>
+        <?php 
     } 
 }
 
@@ -79,8 +77,7 @@ function getSection($connect, $section){
         }
 }
 
-// администратор
-
+// Раздел администратора
 // вывод списка продуктов во вкладке администратора
 function showProductsAdm($connect, $products) {
     while($row = mysqli_fetch_assoc($products)) { 
@@ -95,17 +92,17 @@ function showProductsAdm($connect, $products) {
         } else {
             $new='Нет';
         }
-    ?>
-    <li class="product-item page-products__item">
-      <b class="product-item__name"><?=$name?></b>
-      <span class="product-item__field"><?=$ID?></span>
-      <span class="product-item__field"><?=$price?></span>
-      <span class="product-item__field"><?=getSection($connect, $section); ?></span>
-      <span class="product-item__field"><?=$new?></span>
-      <a href="/php_diplom/products/add.php" class="product-item__edit" aria-label="Редактировать"></a>
-      <button class="product-item__delete"></button>
-    </li>
-<?php } 
+        ?>
+        <li class="product-item page-products__item">
+            <b class="product-item__name"><?=$name?></b>
+            <span class="product-item__field product-id"><?=$ID?></span>
+            <span class="product-item__field product-price"><?=$price?></span>
+            <span class="product-item__field product-category"><?=getSection($connect, $section); ?></span>
+            <span class="product-item__field product-new"><?=$new?></span>
+            <a href="/products/productChange.php" class="product-item__edit" aria-label="Редактировать"></a>
+            <button class="product-item__delete"></button>
+        </li>
+    <?php } 
 }
 
 // получение и вывод списка категорий во вкладке создание продукта
@@ -115,17 +112,40 @@ function getSectionName($connect) {
         <option value="<?=$row['id']?>"><?=$row['name']?></option>
     <?php }
 }
+
 // создать новый продукт во вкладке администратора /products/add.php
-// function createProduct($connect, $name, $price, $img, $new, $sale, $category) {
-//     $password = password_hash($password, PASSWORD_DEFAULT);
-//     if (mysqli_connect_errno()) {
-//         $err = "Ошибка ".mysqli_connect_error();
-//         exit();
-//     } else {
-//         mysqli_query($connect, "INSERT into users (name, price, activity, img, new, sale, category_id)
-//         values ('$name', '$price', 1, '$img', '$new', '$sale', '$category')");
-//     }
-// }
+function createProduct($connect, $name, $price, $img, $new, $sale, $category) {
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    if (mysqli_connect_errno()) {
+        $err = "Ошибка ".mysqli_connect_error();
+        exit();
+    } else {
+        mysqli_query($connect, "INSERT into products (name, price, activity, img, new, sale, category_id)
+        values ('$name', '$price', 1, '$img', '$new', '$sale', '$category')");
+    }
+}
+
+// изменить продукт во вкладке администратора /products/productChange.php
+function editeProduct($connect, $name, $price, $img, $new, $sale, $category) {
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    if (mysqli_connect_errno()) {
+        $err = "Ошибка ".mysqli_connect_error();
+        exit();
+    } else {
+        mysqli_query($connect, "UPDATE products SET name='$name' price='$price' img='$img' new='$new' sale='$sale' category_id='$category' where id='$id' ");
+    }
+}
+
+// удалить продукт во вкладке администратора /products/index.php
+function removeProduct($connect, $productID) {
+    if (mysqli_connect_errno()) {
+        $err = "Ошибка ".mysqli_connect_error();
+        exit();
+    } else {
+        mysqli_query($connect, "DELETE from products where id='$productID' ");
+    }
+}
+
 // добавление нового продукта в БД во вкладке администратора /products/form.php
 function addNewProduct($connect, $name, $price, $photo, $section, $new, $sale) {
     if (mysqli_connect_errno()) {
@@ -139,7 +159,6 @@ function addNewProduct($connect, $name, $price, $photo, $section, $new, $sale) {
     }
   }
 
-
 // фильтрация товаров
 function getFilterCategoryProducts($connect, $param="SELECT * from products ") {
     if (mysqli_connect_errno()) {
@@ -152,11 +171,12 @@ function getFilterCategoryProducts($connect, $param="SELECT * from products ") {
     exit();
 }
 
-
+// проеврка текущего url
 function isCurrentUrl($url){
     return $url == $_SERVER['REQUEST_URI'];
 }
 
+// подсчет количества товаров, соответсвующих параметрам
 function getCounter($connect, $param = 'SELECT COUNT(*) FROM products '){
     $res = mysqli_query($connect, $param);
     $row = mysqli_fetch_assoc($res);
@@ -164,6 +184,7 @@ function getCounter($connect, $param = 'SELECT COUNT(*) FROM products '){
     return $counter;
 }
 
+// получение строки запроса из массива данных
 function build_http_query( $query ){
     $query_array = [];
     foreach( $query as $key => $value ){
@@ -171,6 +192,8 @@ function build_http_query( $query ){
     }
     return implode( '&', $query_array );
 }
+
+// построение запроса в БД исходя из полученных данных
 function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
     if(($data['page'])){
         $start = ($data['page'] * $num) - $num;
@@ -197,8 +220,7 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
         }    
         $req .= ' price between '.$min.' and '.$max;        
     }  
-    
-    
+        
     if($data['sort']){
         if($data['sort'] == 'sortByName' && $data['order'] == 'on'){
             $req .= " ORDER BY name ASC ";
@@ -210,19 +232,19 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
             $req .= " ORDER BY price DESC ";
         }
     }
+
     if($reqStart !== "SELECT COUNT(*) from products "){
         if($start > 0){
             $req .= " LIMIT $num OFFSET $start";
         } else {
             $req .= " LIMIT $num";
         }
-    }
-    
+    }   
     
     return $req;
 }
 
-
+// получение и вывод списка категорий товаров в aside
 function getSectionList($connect) {
     $result = mysqli_query($connect, "SELECT * from sections");
     while($row = mysqli_fetch_assoc($result)) { 
@@ -235,6 +257,5 @@ function getSectionList($connect) {
       <li>
         <a class="filter__list-item <?=$active?>" href="/?category=<?=$row['id']?>" name="<?=$row['id']?>"><?=$row['name']?></a>
       </li>
-    <?php }
-  
-  }
+        <?php }  
+}

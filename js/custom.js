@@ -1,3 +1,4 @@
+// форма добавления товара в БД
 let form = document.getElementById('addProduct')
 let btn = document.querySelector('.addProduct')
 
@@ -8,7 +9,6 @@ $("#addProduct").submit(function (e) {
   // for (let [name, value] of product) {
   //   console.log(`${name} = ${value}`);
   // }
-
   $.ajax({
     type: "POST",
     url: 'form.php',
@@ -29,6 +29,7 @@ $("#addProduct").submit(function (e) {
   })
 })
 
+// форма авторизации на сайте
 $("#authorization").submit(function (e) {
   e.preventDefault();
   let form = document.getElementById('authorization')
@@ -61,7 +62,6 @@ $("#authorization").submit(function (e) {
   })
 })
 
-
 // сортировка товаров
 let filter = '';
 
@@ -83,7 +83,6 @@ $('.filter__list-item').click(function (e) {
   if (category > 0) {
     filter = `category=${category}`;
   }
-
   // очистка сортировки
   $('#sortBy').val('Сортировка')
   $('#sortOrder').val('Порядок')
@@ -93,8 +92,7 @@ $('.filter__list-item').click(function (e) {
   sendReq(filter)
 })
 
-
-// фильтрация товаров по кнопке 'Применить'
+// фильтрация товаров по нажатию кнопки 'Применить'
 $('#filter-button').click(function (e) {
   e.preventDefault()
   let query = makeReq()
@@ -122,7 +120,6 @@ function sendReq(query) {
 // собираем GET запрос
 function makeReq() {
   let page = ($('.paginator__item.active').html() !== undefined) ? $('.paginator__item.active').html() : 1
-
   let category = document.querySelector('.filter__list-item.active').getAttribute('name')
   let minP = parseInt($('.min-price').text())
   let maxP = parseInt($('.max-price').text())
@@ -134,7 +131,6 @@ function makeReq() {
   if ($('#sale').is(':checked')) {
     filtSale = 1
   }
-
   let sort = $('#sortBy').val()
   let order = $('#sortOrder').val()
   if (sort == 'Сортировка' && order == 'Порядок') {
@@ -154,9 +150,10 @@ function makeReq() {
   let query = Object.keys(filter)
     .map(k => esc(k) + '=' + esc(filter[k]))
     .join('&');
-  console.log(query)
   return query
 }
+
+// изменение пагинации в соответсвии с запросом
 function showPagination(num, query) {
   let ul = document.querySelector('.shop__paginator.paginator')
   ul.innerHTML = ''
@@ -171,6 +168,7 @@ function showPagination(num, query) {
   }
 }
 
+// выбор новинок по ссылке в шапке сайта
 $('.new').click(function (e) {
   e.preventDefault()
   clearUrl()
@@ -186,6 +184,8 @@ $('.new').click(function (e) {
     .join('&');
   sendReq(query)
 })
+
+// выбор товаров по распродаже в шапке сайта
 $('.sale').click(function (e) {
   clearUrl()
   e.preventDefault()
@@ -206,4 +206,32 @@ function clearUrl() {
   baseUrl = window.location.href.split("?")[0];
   window.history.pushState('/', '', baseUrl);
 }
+
+// в разделе администратора удаление товара из БД
+$('.product-item__delete').click(function (e) {
+  const id = $(this).siblings('.product-id').text();
+  let req = 'id=' + id
+
+  $.ajax({
+    url: '/products/index.php',
+    data: req,
+    dataType: 'json',
+    type: 'post',
+    success: function (html) {
+      alert('товар с id=' + id + ' удален из БД')
+    }
+  })
+})
+
+// в разделе администратора редакторование товара
+$('.product-item__edit').click(function (e) {
+  e.preventDefault()
+  const name = $(this).siblings('.product-item__name').text()
+  const price = $(this).siblings('.product-price').text()
+  const id = $(this).siblings('.product-id').text()
+
+  let prod = `id=${id}&name=${name}&price=${price}`
+  console.log(prod)
+  // дописать
+})
 

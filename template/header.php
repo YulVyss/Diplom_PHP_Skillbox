@@ -2,8 +2,6 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/include/session.start.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
-
-
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -19,7 +17,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
   <link rel="preload" href="./fonts/roboto-700-normal.woff2" as="font">
   <link rel="icon" href="./img/favicon.png">
   <link rel="stylesheet" href="./css/style.css">
-
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="./js/scripts.js" defer=""></script>
