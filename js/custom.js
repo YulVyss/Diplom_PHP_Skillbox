@@ -34,9 +34,9 @@ $("#authorization").submit(function (e) {
   e.preventDefault();
   let form = document.getElementById('authorization')
   let authorization = new FormData(form)
-  for (let [name, value] of authorization) {
-    console.log(`${name} = ${value}`);
-  }
+  // for (let [name, value] of authorization) {
+  //   console.log(`${name} = ${value}`);
+  // }
   let response = document.querySelector('.response')
   $.ajax({
     type: "POST",
@@ -46,7 +46,6 @@ $("#authorization").submit(function (e) {
     contentType: false,
     processData: false,
     success: function (data) {
-      console.log(data)
       if (data == 'false') {
         response.innerHTML = 'не верно введен логин и/или пароль, попробуйте снова'
       } else if (data === 1) {
@@ -235,3 +234,44 @@ $('.product-item__edit').click(function (e) {
   // дописать
 })
 
+// оформление заказа
+$('#btn-order').click(function (e) {
+  e.preventDefault()
+  const form = $('#order')[0];
+  const data = new FormData(form);
+  for (let [name, value] of data) {
+    console.log(`${name} = ${value}`);
+  }
+  $.ajax({
+    url: '/products/orders.php',
+    data: data,
+    dataType: 'json',
+    type: 'post',
+    contentType: false,
+    processData: false,
+    success: function (data) {
+      console.log('ok')
+    },
+    error: function (jqXHR, errorThrown) {
+      console.log('ERROR ' + errorThrown + jqXHR);
+    }
+  })
+})
+
+// изменение статуса заказа во вкладке Заказы
+function changeStatus(text, id) {
+  let data = {
+    'statusOrder': text,
+    'id': id,
+  }
+
+  $.ajax({
+    url: '/products/orderChange.php',
+    data: data,
+    dataType: 'json',
+    type: 'post',
+    success: function (data) {
+      console.log(data)
+    }
+  })
+}

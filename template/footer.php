@@ -9,10 +9,10 @@
           <a class="main-menu__item" href="/">Главная</a>
         </li>
         <li>
-          <a class="main-menu__item" href="/new.php">Новинки</a>
+          <a class="main-menu__item new" href="#">Новинки</a>
         </li>
         <li>
-          <a class="main-menu__item" href="/sale.php">Sale</a>
+          <a class="main-menu__item sale" href="#">Sale</a>
         </li>
         <li>
           <a class="main-menu__item" href="/delivery.php">Доставка</a>

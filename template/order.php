@@ -1,12 +1,14 @@
 <section class="shop-page__order" hidden="">
     <div class="shop-page__wrapper">
       <h2 class="h h--1">Оформление заказа</h2>
-      <form action="#" method="post" class="custom-form js-order">
+      <form action="#" method="post" class="custom-form js-order" id="order">
         <fieldset class="custom-form__group">
           <legend class="custom-form__title">Укажите свои личные данные</legend>
           <p class="custom-form__info">
             <span class="req">*</span> поля обязательные для заполнения
           </p>
+          <input type="text" name="prod-id" class="prod-id" hidden>
+          <input type="text" name="prod-price" class="prod-price" hidden>
           <div class="custom-form__column">
             <label class="custom-form__input-wrapper" for="surname">
               <input id="surname" class="custom-form__input" type="text" name="surname" required="">
@@ -21,20 +23,20 @@
               <p class="custom-form__input-label">Отчество</p>
             </label>
             <label class="custom-form__input-wrapper" for="phone">
-              <input id="phone" class="custom-form__input" type="tel" name="thirdName" required="">
+              <input id="phone" class="custom-form__input" type="tel" name="phone" required="">
               <p class="custom-form__input-label">Телефон <span class="req">*</span></p>
             </label>
             <label class="custom-form__input-wrapper" for="email">
-              <input id="email" class="custom-form__input" type="email" name="thirdName" required="">
+              <input id="email" class="custom-form__input" type="email" name="email" required="">
               <p class="custom-form__input-label">Почта <span class="req">*</span></p>
             </label>
           </div>
         </fieldset>
         <fieldset class="custom-form__group js-radio">
           <legend class="custom-form__title custom-form__title--radio">Способ доставки</legend>
-          <input id="dev-no" class="custom-form__radio" type="radio" name="delivery" value="dev-no" checked="">
+          <input id="dev-no" class="custom-form__radio" type="radio" name="delivery" value="Самовывоз" checked="">
           <label for="dev-no" class="custom-form__radio-label">Самовывоз</label>
-          <input id="dev-yes" class="custom-form__radio" type="radio" name="delivery" value="dev-yes">
+          <input id="dev-yes" class="custom-form__radio" type="radio" name="delivery" value="Курьерная доставка">
           <label for="dev-yes" class="custom-form__radio-label">Курьерная доставка</label>
         </fieldset>
         <div class="shop-page__delivery shop-page__delivery--no">
@@ -86,22 +88,22 @@
         </div>
         <fieldset class="custom-form__group shop-page__pay">
           <legend class="custom-form__title custom-form__title--radio">Способ оплаты</legend>
-          <input id="cash" class="custom-form__radio" type="radio" name="pay" value="cash">
+          <input id="cash" class="custom-form__radio" type="radio" name="pay" value="Наличные">
           <label for="cash" class="custom-form__radio-label">Наличные</label>
-          <input id="card" class="custom-form__radio" type="radio" name="pay" value="card" checked="">
+          <input id="card" class="custom-form__radio" type="radio" name="pay" value="Банковской картой" checked="">
           <label for="card" class="custom-form__radio-label">Банковской картой</label>
         </fieldset>
         <fieldset class="custom-form__group shop-page__comment">
           <legend class="custom-form__title custom-form__title--comment">Комментарии к заказу</legend>
           <textarea class="custom-form__textarea" name="comment"></textarea>
         </fieldset>
-        <button class="button" type="submit">Отправить заказ</button>
+        <button class="button" type="submit" id="btn-order">Отправить заказ</button>
       </form>
     </div>
   </section>
   <section class="shop-page__popup-end" hidden="">
     <div class="shop-page__wrapper shop-page__wrapper--popup-end">
-      <h2 class="h h--1 h--icon shop-page__end-title">Спасибо за заказ!</h2>
+      <h2 class="h h--1 h--icon shop-page__end-title">Спасибо <span class="resp"></span> за заказ!</h2>
       <p class="shop-page__end-message">Ваш заказ успешно оформлен, с вами свяжутся в ближайшее время</p>
       <button class="button">Продолжить покупки</button>
     </div>

@@ -111,9 +111,12 @@ if (shopList) {
     const prod = evt.path || (evt.composedPath && evt.composedPath());;
 
     if (prod.some(pathItem => pathItem.classList && pathItem.classList.contains('shop__item'))) {
+      const id = prod[0].querySelector('.id').textContent
+      const price = parseInt(prod[0].querySelector('.product__price').textContent)
 
       const shopOrder = document.querySelector('.shop-page__order');
-
+      document.querySelector('.prod-id').value = id;
+      document.querySelector('.prod-price').value = price;
       toggleHidden(document.querySelector('.intro'), document.querySelector('.shop'), shopOrder);
 
       window.scroll(0, 0);
@@ -212,13 +215,17 @@ if (pageOrderList) {
     if (evt.target.classList && evt.target.classList.contains('order-item__btn')) {
 
       const status = evt.target.previousElementSibling;
+      const parent = evt.target.parentElement.parentElement.parentElement
+      const prodID = parent.querySelector('.order-item__info--id').textContent
 
       if (status.classList && status.classList.contains('order-item__info--no')) {
         status.textContent = 'Выполнено';
+
       } else {
         status.textContent = 'Не выполнено';
-      }
 
+      }
+      changeStatus(status.textContent, prodID);
       status.classList.toggle('order-item__info--no');
       status.classList.toggle('order-item__info--yes');
 

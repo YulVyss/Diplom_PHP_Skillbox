@@ -27,6 +27,3 @@ if (!empty($_POST['current_login'] && !empty($_POST['current_password']))) {
     }
     mysqli_close($connect);   
 }
-if (isset($_COOKIE['authorized'])) {
-    setcookie('authorized', $_COOKIE['authorized'], time() + 60*60*24*30, '/');
-}
