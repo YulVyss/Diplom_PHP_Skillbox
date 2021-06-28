@@ -4,10 +4,12 @@ if (!isset($_COOKIE['authorized'])) {
   exit();
 }
 include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
+
+
 ?>
 <main class="page-add">  
   <h1 class="h h--1">Изменение товара</h1>
-  <form class="custom-form" action="form.php" id='addProduct'  method="post" enctype="multipart/form-data">
+  <form class="custom-form" action="form.php" id='changeProduct'  method="post" enctype="multipart/form-data">
     <fieldset class="page-add__group custom-form__group">
       <legend class="page-add__small-title custom-form__title">Данные о товаре</legend>
       <label for="product-name" class="custom-form__input-wrapper page-add__first-wrapper">
@@ -46,11 +48,11 @@ include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
       <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox">
       <label for="sale" class="custom-form__checkbox-label">Распродажа</label>
     </fieldset>
-    <button class="button addProduct" type="submit" name="submit" value="submit">Добавить товар</button>
+    <button class="button changeProduct" type="submit" name="submit" value="submit">Сохранить изменения</button>
   </form>
   <section class="shop-page__popup-end page-add__popup-end" hidden="">
     <div class="shop-page__wrapper shop-page__wrapper--popup-end">
-      <h2 class="h h--1 h--icon shop-page__end-title">Товар <span class='product__added'></span> успешно добавлен</h2>      
+      <h2 class="h h--1 h--icon shop-page__end-title">Товар <span class='product__added'></span> успешно изменен</h2>      
     </div>
   </section>
 </main>

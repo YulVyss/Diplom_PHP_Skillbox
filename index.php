@@ -7,7 +7,7 @@ if($_GET){
   $req = getRequest($_GET, $num, $start, "SELECT * from products ");
 }
 
-if(($_GET['page'])){
+if(isset($_GET['page']) && ($_GET['page'])){
   $start = ($_GET['page'] * $num) - $num;
   $req = getRequest($_GET, $num, $start, "SELECT * from products ");  
   $count = getRequest($_GET, $num, $start, "SELECT COUNT(*) from products ");
@@ -34,7 +34,7 @@ $str_pag = ceil($counter / $num);
       <ul class="shop__paginator paginator">
         <?php        
           for ($i = 1; $i <= $str_pag; $i++){
-            if($_REQUEST['page'] == $i){
+            if(isset($_REQUEST['page']) && $_REQUEST['page'] == $i){
               $active = 'active';
             } elseif($re == '/' && $i == 1){
               $active = 'active';

@@ -2,7 +2,7 @@
 if (!isset($_COOKIE['authorized'])) {
   header("Location: //admin/index.php"); 
   exit();
-}
+} 
 include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
 ?>
 <main class="page-add">  
@@ -36,8 +36,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
     <fieldset class="page-add__group custom-form__group">
       <legend class="page-add__small-title custom-form__title">Раздел</legend>
       <div class="page-add__select">
-        <select name="category" id="category" class="custom-form__select" multiple="multiple">
-          <option name='<?php getSectionName($connect) ?>'  hidden="">Название раздела</option>
+        <select name="category" id="category" class="custom-form__select" multiple="multiple">         
           <?php getSectionName($connect) ?>
         </select>
       </div>

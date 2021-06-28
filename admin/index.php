@@ -5,9 +5,9 @@
   <?php if (isset($_COOKIE['authorized'])) { ?>
     <input type="email" class="custom-form__input" hidden name="current_login" value="<?=$current_login=htmlspecialchars($_COOKIE['authorized'])?>">
   <?php } else { ?>
-    <input type="email" class="custom-form__input" required name="current_login" value="<?=$current_login?>">
+    <input type="email" class="custom-form__input" required name="current_login" value="<?=$current_login ?? ''?>">
   <?php } ?>
-    <input type="password" class="custom-form__input" required name="current_password" value="<?= $current_password ?>">
+    <input type="password" class="custom-form__input" required name="current_password" value="<?= $current_password ?? ''?>">
     <button class="button" type="submit">Войти в личный кабинет</button>
   </form>
 </main>

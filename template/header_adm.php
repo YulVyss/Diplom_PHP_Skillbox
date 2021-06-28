@@ -1,4 +1,4 @@
-<?php 
+<?php
 include $_SERVER['DOCUMENT_ROOT'] . '/include/session.start.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
@@ -32,7 +32,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
         <a class="main-menu__item" href="/">Главная</a>
       </li>
       <li>
-        <a class="main-menu__item" href="/products/">Товары</a>
+        <a class="main-menu__item" href="/products/index.php">Товары</a>
       </li>
       <li>
         <a class="main-menu__item" href="/products/orders.php">Заказы</a>

@@ -1,14 +1,15 @@
-// форма добавления товара в БД
-let form = document.getElementById('addProduct')
-let btn = document.querySelector('.addProduct')
-
+// форма добавления товара в БД во вкладке администратора
 $("#addProduct").submit(function (e) {
   e.preventDefault();
+  let form = document.getElementById('addProduct')
   let product = new FormData(form)
-  //просмотр данных о продукте в консоли
-  // for (let [name, value] of product) {
-  //   console.log(`${name} = ${value}`);
-  // }
+  let cat = []
+  $('#category').each(function () {
+    cat.push($(this).val());
+  });
+  product.append('add', 'product')
+  product.append('category', cat)
+
   $.ajax({
     type: "POST",
     url: 'form.php',
@@ -16,11 +17,11 @@ $("#addProduct").submit(function (e) {
     dataType: 'json',
     contentType: false,
     processData: false,
-    success: function (data) {
+    success: function (html) {
       form.hidden = true;
       const prodName = document.querySelector('.product__added')
       const popupEnd = document.querySelector('.page-add__popup-end')
-      prodName.innerHTML = `${data}`
+      prodName.innerHTML = `${html}`
       popupEnd.hidden = false;
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -50,8 +51,10 @@ $("#authorization").submit(function (e) {
         response.innerHTML = 'не верно введен логин и/или пароль, попробуйте снова'
       } else if (data === 1) {
         document.location.href = "/products/index.php";
-      } else {
+      } else if (data === 2) {
         document.location.href = "/products/orders.php";
+      } else {
+        document.location.href = "/";
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -223,15 +226,37 @@ $('.product-item__delete').click(function (e) {
 })
 
 // в разделе администратора редакторование товара
-$('.product-item__edit').click(function (e) {
-  e.preventDefault()
-  const name = $(this).siblings('.product-item__name').text()
-  const price = $(this).siblings('.product-price').text()
-  const id = $(this).siblings('.product-id').text()
+$('#changeProduct').submit(function (e) {
+  e.preventDefault();
+  const urlParams = new URLSearchParams(location.search);
+  for (const [key, value] of urlParams) {
+    if (`${key}` === 'id') {
+      id = parseInt(`${value}`)
+    }
+  }
+  let form = document.querySelector('#changeProduct')
+  let product = new FormData(form)
+  product.append('id', id)
+  product.append('change', 'product')
 
-  let prod = `id=${id}&name=${name}&price=${price}`
-  console.log(prod)
-  // дописать
+  $.ajax({
+    type: "POST",
+    url: '/products/form.php',
+    data: product,
+    dataType: 'json',
+    contentType: false,
+    processData: false,
+    success: function (data) {
+      form.hidden = true;
+      const prodName = document.querySelector('.product__added')
+      const popupEnd = document.querySelector('.page-add__popup-end')
+      prodName.innerHTML = `${data}`
+      popupEnd.hidden = false;
+    },
+    error: function (jqXHR, errorThrown) {
+      console.log('ERROR ' + errorThrown + jqXHR);
+    }
+  })
 })
 
 // оформление заказа
@@ -250,10 +275,10 @@ $('#btn-order').click(function (e) {
     contentType: false,
     processData: false,
     success: function (data) {
-      console.log('ok')
+      console.log(`${data}`)
     },
     error: function (jqXHR, errorThrown) {
-      console.log('ERROR ' + errorThrown + jqXHR);
+      console.log('ERROR ' + errorThrown);
     }
   })
 })
@@ -271,7 +296,21 @@ function changeStatus(text, id) {
     dataType: 'json',
     type: 'post',
     success: function (data) {
-      console.log(data)
+      console.log(`${data}`)
     }
   })
+}
+
+// доделать  !!!!!!!!!!!!
+// настройка полосы диапазона цен при смене страниц
+function changeRange(min, max) {
+  // $(".range__line").slider("option", "values", [min, max]);
+  // $(".range__line").slider("values", [55, 105]);
+  $(".range__line").slider({
+    change: function (event, ui) {
+      $(".range__line").slider("values", [min, max]);
+    }
+    // $( ".range__line" ).on( "slidechange", function( event, ui ) {} );
+  });
+
 }

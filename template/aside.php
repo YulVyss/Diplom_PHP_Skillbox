@@ -12,7 +12,7 @@
           <b class="filter__title">Категории</b>
           <ul class="filter__list">
           <?php
-            if($_GET['category'] > 0){ ?>               
+            if(isset($_GET['category']) && $_GET['category'] > 0){ ?>               
               <li>
                 <a class="filter__list-item" href="all" name=0>ВсеВсеВсе</a>
               </li>
@@ -36,13 +36,13 @@
           </div>
         </div>
         <fieldset class="custom-form__group">
-        <?php if ($_REQUEST['new'] == 1) { ?>
+        <?php if (isset($_REQUEST['new']) && $_REQUEST['new'] == 1) { ?>
           <input type="checkbox" name="new" id="new" class="custom-form__checkbox " checked >
         <?php } else { ?>
           <input type="checkbox" name="new" id="new" class="custom-form__checkbox " >
         <?php } ?>
         <label for="new" class="custom-form__checkbox-label custom-form__info" style="display: block;">Новинка</label>
-        <?php if ($_REQUEST['sale'] == 1) { ?>
+        <?php if (isset($_REQUEST['sale']) && $_REQUEST['sale'] == 1) { ?>
           <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox" checked>
         <?php } else { ?>
           <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox">

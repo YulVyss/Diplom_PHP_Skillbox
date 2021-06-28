@@ -3,20 +3,21 @@ $connect = mysqli_connect($host, $user, $password, $bdname);
 $counter = 0;
 
 // создать пользователя (без вывода на сайте)
-function createUser($connect, $name, $login, $password) {
+function createUser($connect, $name, $login, $password, $rights) {
     $password = password_hash($password, PASSWORD_DEFAULT);
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        mysqli_query($connect, "INSERT into users (name, login, password)
+        mysqli_query($connect, "INSERT into users (name, login, password, rights)
         values ('".mysqli_real_escape_string($connect, $name)."', 
         '".mysqli_real_escape_string($connect, $login)."', 
-        '".mysqli_real_escape_string($connect, $password)."')");
+        '".mysqli_real_escape_string($connect, $password)."', '$rights')");
     }
 }
-// createUser($connect, 'admin', 'admin@fashion.ru', 'admin';
-// createUser($connect, 'operator1', 'operator1@fashion.ru', 'o1p2e3r4');
+// createUser($connect, 'admin', 'admin@fashion.ru', 'admin', 'admin';
+// createUser($connect, 'operator1', 'operator1@fashion.ru', 'o1p2e3r4', 'operator');
+// createUser($connect, 'operator2', 'operator2@fashion.ru', '33p2eh84', 'operator');
 
 // получение из БД всех продуктов 
 function getAllProducts($connect, $num, $start) {
@@ -58,7 +59,7 @@ function showProducts($products) {
         ?>
         <article class="shop__item product" tabindex="0">
             <div class="product__image">
-            <img src="./img/products/<?=$img?>" alt="product-name">
+            <img src="./img/products/<?=$img?>" alt="product-image">
             </div>
             <p class="product__name"><?=$name?></p>
             <span class="id" hidden><?=$id?></span>
@@ -101,7 +102,7 @@ function showProductsAdm($connect, $products) {
             <span class="product-item__field product-price"><?=$price?></span>
             <span class="product-item__field product-category"><?=getSection($connect, $section); ?></span>
             <span class="product-item__field product-new"><?=$new?></span>
-            <a href="/products/productChange.php" class="product-item__edit" aria-label="Редактировать"></a>
+            <a href="/products/productChange.php?id=<?=$ID?>" class="product-item__edit" aria-label="Редактировать"></a>
             <button class="product-item__delete"></button>
         </li>
     <?php } 
@@ -115,26 +116,29 @@ function getSectionName($connect) {
     <?php }
 }
 
-// создать новый продукт во вкладке администратора /products/add.php
-function createProduct($connect, $name, $price, $img, $new, $sale, $category) {
-    $password = password_hash($password, PASSWORD_DEFAULT);
+// добавление нового товара в БД во вкладке администратора /products/form.php
+function addNewProduct($connect, $name, $price, $photo, $section, $new, $sale) {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
+        echo json_encode($err);
         exit();
     } else {
         mysqli_query($connect, "INSERT into products (name, price, activity, img, new, sale, category_id)
-        values ('$name', '$price', 1, '$img', '$new', '$sale', '$category')");
+        values ('$name', '$price', '1', '$photo', '$new', '$sale', '$section')");
+        exit();
     }
-}
+  }
 
 // изменить продукт во вкладке администратора /products/productChange.php
-function editeProduct($connect, $name, $price, $img, $new, $sale, $category) {
-    $password = password_hash($password, PASSWORD_DEFAULT);
+function editeProduct($connect, $id, $name, $price, $img, $new, $sale, $category) {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
+        echo json_encode($err);
         exit();
     } else {
-        mysqli_query($connect, "UPDATE products SET name='$name' price='$price' img='$img' new='$new' sale='$sale' category_id='$category' where id='$id' ");
+        mysqli_query($connect, "UPDATE products SET name='$name', price='$price', img='$img', new='$new', sale='$sale', category_id='$category' where id='$id' ");
+        echo json_encode($name); 
+        exit();
     }
 }
 
@@ -147,19 +151,6 @@ function removeProduct($connect, $productID) {
         mysqli_query($connect, "DELETE from products where id='$productID' ");
     }
 }
-
-// добавление нового продукта в БД во вкладке администратора /products/form.php
-function addNewProduct($connect, $name, $price, $photo, $section, $new, $sale) {
-    if (mysqli_connect_errno()) {
-        $err = "Ошибка ".mysqli_connect_error();
-        echo json_encode($err);
-        exit();
-    } else {
-        mysqli_query($connect, "INSERT into products (name, price, activity, img, new, sale, category_id)
-        values ('$name', '$price', '1', '$photo', '$new', '$sale', '$section')");
-        echo json_encode($name);
-    }
-  }
 
 // фильтрация товаров
 function getFilterCategoryProducts($connect, $param="SELECT * from products ") {
@@ -223,7 +214,7 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
         $req .= ' price between '.$min.' and '.$max;        
     }  
         
-    if($data['sort']){
+    if(isset($data['sort']) && $data['sort']){
         if($data['sort'] == 'sortByName' && $data['order'] == 'on'){
             $req .= " ORDER BY name ASC ";
         } elseif($data['sort'] == 'sortByName' && $data['order'] == 'reverse'){
@@ -250,7 +241,7 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
 function getSectionList($connect) {
     $result = mysqli_query($connect, "SELECT * from sections");
     while($row = mysqli_fetch_assoc($result)) { 
-      if($_GET['category'] == $row['id']){
+      if(isset($_GET['category']) && $_GET['category'] == $row['id']){
         $active = 'active';
       } else{
         $active = 'AAA';
@@ -266,12 +257,14 @@ function getSectionList($connect) {
 function addNewOrder($connect, $date, $productPrice, $name, $surname, $thirdname, $email, $phone, $delivery, $payment, $status, $comments, $city, $street, $home, $aprt, $productId) {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
-        echo json_encode($err);
+        // echo json_encode($err);
+        echo $err;
         exit();
     } else {
         mysqli_query($connect, "INSERT into orders (`date`, `price`, `user-name`, `user-surname`, `user-thirdname`, `email`, `phone`, `delivery`, `payment`, `status`, `comments`, `city`, `street`, `home`, `aprt`, `product-id`)
         values ('$date', '$productPrice', '$name', '$surname', '$thirdname', '$email', '$phone', '$delivery', '$payment', '$status', '$comments', '$city', '$street', '$home', '$aprt', '$productId')");
-        echo json_encode($name);
+        // echo json_encode($name);
+        echo $name;
         exit();
     }
   }

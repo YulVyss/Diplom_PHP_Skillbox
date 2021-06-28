@@ -1,6 +1,14 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
- 
-if($_POST['prod-id']) {
+<?php 
+if(!isset($_COOKIE['authorized'])) {
+  header('Location: /index.php');
+}
+include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
+
+if(isset($_POST['prod-id']) && $_POST['prod-id'] !== '') {
+  if($name == '' || $surname == '' || $email == '' || $phone == ''){
+    echo $err = 'ошибка валидации';
+    exit();
+  }
   $date = date("Y-m-d H:i:s");
   $name = $_POST['name'];
   $surname = $_POST['surname'];
@@ -18,10 +26,10 @@ if($_POST['prod-id']) {
   $productId = $_POST['prod-id'];
   $productPrice = $_POST['prod-price'];
   
-  if($productPrice <= 2000 && $delivery === 'Курьерная доставка') {
-    $productPrice += 280;
+  if($productPrice <= $minsum && $delivery === 'Курьерная доставка') {
+    $productPrice += $delivery;
   }
-  addNewOrder($connect, $date, $productPrice, $name, $surname, $thirdname, $email, $phone, $delivery, $payment, $status, $comments, $city, $street, $home, $aprt, $productId);
+  // addNewOrder($connect, $date, $productPrice, $name, $surname, $thirdname, $email, $phone, $delivery, $payment, $status, $comments, $city, $street, $home, $aprt, $productId);
 }
 
 
