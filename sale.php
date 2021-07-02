@@ -1,7 +1,8 @@
 <?php 
 include $_SERVER['DOCUMENT_ROOT'] . '/template/header.php'; 
-include $_SERVER['DOCUMENT_ROOT'] . '/template/aside.php'; 
+include $_SERVER['DOCUMENT_ROOT'] . '/template/aside.php';
 $re = $_SERVER['REQUEST_URI'];
+$counter = getCounter($connect, 'SELECT COUNT(*) FROM products where sale=1 ');
 
 if(isset($_GET['page']) && ($_GET['page'])){
   $start = ($_GET['page'] * $num) - $num;
@@ -11,35 +12,34 @@ if(isset($_GET['page']) && ($_GET['page'])){
   $products = getFilterCategoryProducts($connect, $req);    
 } else {
   $start = 0;
-  $counter = getCounter($connect, 'SELECT COUNT(*) FROM products ');
-  $products = getAllProducts($connect, $num, $start);
+  $counter = getCounter($connect, 'SELECT COUNT(*) FROM products where sale=1 ');
+  $products = getSaleNewProducts($connect, 'sale=1', $num, $start);
 }
 $str_pag = ceil($counter / $num);
-
-?>
-      <p class="shop__sorting-res">Найдено <span class="res-sort"><?=$counter;?></span> моделей</p>
-    </section>
-    <section class="shop__list">
-    
+?>      
+        <p class="shop__sorting-res">Найдено <span class="res-sort"><?=$counter;?></span> моделей</p>
+      </section>
+      <section class="shop__list">
       <?php 
         if($products){          
           showProducts($products);
-        }         
+        }
       ?>
-    </section>
+      </section>
       <ul class="shop__paginator paginator">
         <?php        
-          for ($i = 1; $i <= $str_pag; $i++){
+          for ($i = 1; $i <= $str_pag; $i++) {
             if(isset($_REQUEST['page']) && $_REQUEST['page'] == $i){
               $active = 'active';
-            } elseif($re == '/' && $i == 1){
+            } elseif($re == '/sale.php' && $i == 1){
               $active = 'active';
             }else{
               $active = '';
             }   
-            $_GET['page'] = $i;          
+            $_GET['page'] = $i;
+            $_GET['sale'] = 1;          
             $req = build_http_query($_GET);            
-            echo "<li><a class='paginator__item ".$active." ' href='/?".$req."' >".$i."</a></li>";
+            echo "<li><a class='paginator__item ".$active." ' href='/sale.php?".$req."' >".$i."</a></li>";
           }           
         ?>
       </ul>
@@ -48,4 +48,4 @@ $str_pag = ceil($counter / $num);
   <?php include $_SERVER['DOCUMENT_ROOT'] . '/template/order.php'; ?>
 </main>
 </html>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/footer.php'; ?> -->

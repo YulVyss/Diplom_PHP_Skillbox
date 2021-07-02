@@ -1,8 +1,4 @@
 <?php
-// $host = 'localhost';
-// $user = 'u0936993_default'; //имя пользователя
-// $password = '7X4b5A2h'; //пароль
-// $bdname = 'u0936993_wp-1'; // название БД
 
 // настройки соединения с БД
 $host = 'localhost';

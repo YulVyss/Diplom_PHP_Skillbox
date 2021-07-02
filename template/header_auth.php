@@ -32,12 +32,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
         <a class="main-menu__item" href="/">Главная</a>
       </li>
       <li>
-        <a class="main-menu__item" href="/products/index.php">Товары</a>
-      </li>
-      <li>
-        <a class="main-menu__item" href="/products/orders.php">Заказы</a>
-      </li>
-      <li>
         <a class="main-menu__item" href="?logout=on">Выйти</a>
       </li>
     </ul>

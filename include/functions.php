@@ -165,8 +165,11 @@ function getFilterCategoryProducts($connect, $param="SELECT * from products ") {
 }
 
 // проеврка текущего url
-function isCurrentUrl($url){
-    return $url == $_SERVER['REQUEST_URI'];
+function isCurrentUrl($req){
+    $url = $_SERVER['REQUEST_URI'];
+    $url = explode('?', $url);
+    $url = $url[0];    
+    return $url === $req;
 }
 
 // подсчет количества товаров, соответсвующих параметрам
@@ -213,6 +216,13 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
         }    
         $req .= ' price between '.$min.' and '.$max;        
     }  
+    if(!isset($data['category']) && isset($data['new'])) {
+        $req .= " where new=1 ";
+    }
+    if(!isset($data['category']) && isset($data['sale'])) {
+        $req .= " where sale=1 ";
+    }
+      
         
     if(isset($data['sort']) && $data['sort']){
         if($data['sort'] == 'sortByName' && $data['order'] == 'on'){
@@ -257,15 +267,11 @@ function getSectionList($connect) {
 function addNewOrder($connect, $date, $productPrice, $name, $surname, $thirdname, $email, $phone, $delivery, $payment, $status, $comments, $city, $street, $home, $aprt, $productId) {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
-        // echo json_encode($err);
-        echo $err;
+        echo json_encode($err);
         exit();
     } else {
         mysqli_query($connect, "INSERT into orders (`date`, `price`, `user-name`, `user-surname`, `user-thirdname`, `email`, `phone`, `delivery`, `payment`, `status`, `comments`, `city`, `street`, `home`, `aprt`, `product-id`)
         values ('$date', '$productPrice', '$name', '$surname', '$thirdname', '$email', '$phone', '$delivery', '$payment', '$status', '$comments', '$city', '$street', '$home', '$aprt', '$productId')");
-        // echo json_encode($name);
-        echo $name;
-        exit();
     }
   }
 
@@ -275,7 +281,7 @@ function getOrders($connect) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        return mysqli_query($connect, "SELECT * from orders ORDER BY status DESC, date ASC");
+        return mysqli_query($connect, "SELECT * from orders ORDER BY status DESC, id ASC");
     }
 }
 

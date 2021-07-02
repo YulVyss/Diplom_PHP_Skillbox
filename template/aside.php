@@ -14,11 +14,11 @@
           <?php
             if(isset($_GET['category']) && $_GET['category'] > 0){ ?>               
               <li>
-                <a class="filter__list-item" href="all" name=0>ВсеВсеВсе</a>
+                <a class="filter__list-item" href="all" name=0>Все</a>
               </li>
             <?php  } else { ?>
               <li>
-                <a class="filter__list-item active" href="all" name=0>ВсеВсеВсе</a>
+                <a class="filter__list-item active" href="all" name=0>Все</a>
               </li>
             <?php } 
               getSectionList($connect); ?>            

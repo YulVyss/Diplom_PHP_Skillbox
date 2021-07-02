@@ -30,7 +30,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
   <nav class="page-header__menu">
     <ul class="main-menu main-menu--header">
       <li>
-        <a class="main-menu__item active" href="/">Главная</a>
+        <a class="main-menu__item <?= isCurrentUrl('/') ? 'active' : '' ?>" href="/">Главная</a>
       </li>
       <li>
         <a class="main-menu__item new <?= isCurrentUrl('/new.php') ? 'active' : '' ?>" href="/new.php">Новинки </a>

@@ -1,4 +1,4 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/template/header_auth.php'; ?>
 <main class="page-authorization">
   <h1 class="h h--1">Авторизация</h1>
   <form class="custom-form" action="" method="post" id="authorization">

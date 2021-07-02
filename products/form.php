@@ -2,6 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/include/login.php';
 
+// добавление нового товара
 if($_POST['add']) {
   
   $product_name = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-name']));
@@ -24,6 +25,8 @@ if($_POST['add']) {
   }
   echo json_encode($product_name);
 }
+
+// изменение товара
 if($_POST['change']){
   $ID = $_POST['id'];
   $product_name = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-name']));
@@ -42,4 +45,33 @@ if($_POST['change']){
   }
   editeProduct($connect, $ID, $product_name, $product_price, $product_photo, $new, $sale, $product_section);
   echo json_encode($product_name);
+}
+
+// оформление заказа
+if(isset($_POST['prod-id']) && $_POST['prod-id'] !== '') {
+  $date = date("Y-m-d H:i:s");
+  $name = $_POST['name'];
+  $surname = $_POST['surname'];
+  $thirdname = $_POST['thirdname'] ?? '';  
+  $email = $_POST['email'];
+  $phone = $_POST['phone'];
+  $delivery = $_POST['delivery'];
+  $payment = $_POST['pay'];
+  $status = 'Не выполнено';
+  $comments = $_POST['comment'] ?? '';
+  $city = $_POST['city'] ?? '';
+  $street = $_POST['street'] ?? '';
+  $home = $_POST['home'] ?? '';
+  $aprt = $_POST['aprt'] ?? '';
+  $productId = $_POST['prod-id'];
+  $productPrice = $_POST['prod-price'];
+  if($name == '' || $surname == '' || $email == '' || $phone == ''){
+    echo $err = 'ошибка валидации';
+    exit();
+  }
+  if($productPrice <= $minsum && $delivery === 'Курьерная доставка') {
+    $productPrice += $delivery;
+  }
+  addNewOrder($connect, $date, $productPrice, $name, $surname, $thirdname, $email, $phone, $delivery, $payment, $status, $comments, $city, $street, $home, $aprt, $productId);
+  echo json_encode($productPrice);
 }

@@ -35,9 +35,6 @@ $("#authorization").submit(function (e) {
   e.preventDefault();
   let form = document.getElementById('authorization')
   let authorization = new FormData(form)
-  // for (let [name, value] of authorization) {
-  //   console.log(`${name} = ${value}`);
-  // }
   let response = document.querySelector('.response')
   $.ajax({
     type: "POST",
@@ -88,9 +85,18 @@ $('.filter__list-item').click(function (e) {
   // очистка сортировки
   $('#sortBy').val('Сортировка')
   $('#sortOrder').val('Порядок')
+  const url = window.location.href.split("/")[3];
   // очистка чекбоксов
-  $('#sale').attr('checked', false);
-  $('#new').attr('checked', false);
+  if (url === "sale.php") {
+    filter += '&sale=1'
+  } else {
+    $('#sale').removeAttr('checked');
+  }
+  if (url === "new.php") {
+    filter += '&new=1'
+  } else {
+    $('#new').removeAttr('checked');
+  }
   sendReq(filter)
 })
 
@@ -162,7 +168,14 @@ function showPagination(num, query) {
   for (let i = 1; i <= num; i++) {
     let li = document.createElement('li')
     let a = document.createElement('a')
-    a.setAttribute('href', '/?page=' + i + '&' + query)
+    if (window.location.pathname === "/new.php") {
+      a.setAttribute('href', '/new.php?page=' + i + '&' + query)
+    } else if (window.location.pathname === "/sale.php") {
+      a.setAttribute('href', '/sale.php?page=' + i + '&' + query)
+    } else {
+      a.setAttribute('href', '/?page=' + i + '&' + query)
+    }
+
     a.classList.add('paginator__item')
     a.innerHTML = i
     li.appendChild(a)
@@ -170,39 +183,15 @@ function showPagination(num, query) {
   }
 }
 
-// выбор новинок по ссылке в шапке сайта
-$('.new').click(function (e) {
-  e.preventDefault()
-  clearUrl()
+if (window.location.pathname === "/new.php") {
   $('#new').attr('checked', 'checked')
-  filtNew = 1
-  filter = {
-    'category': 0,
-    'new': filtNew,
-  }
-  let esc = encodeURIComponent;
-  let query = Object.keys(filter)
-    .map(k => esc(k) + '=' + esc(filter[k]))
-    .join('&');
-  sendReq(query)
-})
-
-// выбор товаров по распродаже в шапке сайта
-$('.sale').click(function (e) {
-  clearUrl()
-  e.preventDefault()
+  $('#sale').removeAttr('checked')
+}
+if (window.location.pathname === "/sale.php") {
   $('#sale').attr('checked', 'checked')
-  filtSale = 1
-  filter = {
-    'category': 0,
-    'sale': filtSale,
-  }
-  let esc = encodeURIComponent;
-  let query = Object.keys(filter)
-    .map(k => esc(k) + '=' + esc(filter[k]))
-    .join('&');
-  sendReq(query)
-})
+  $('#new').removeAttr('checked')
+}
+
 
 function clearUrl() {
   baseUrl = window.location.href.split("?")[0];
@@ -268,7 +257,7 @@ $('#btn-order').click(function (e) {
     console.log(`${name} = ${value}`);
   }
   $.ajax({
-    url: '/products/orders.php',
+    url: '/products/form.php',
     data: data,
     dataType: 'json',
     type: 'post',
@@ -276,9 +265,10 @@ $('#btn-order').click(function (e) {
     processData: false,
     success: function (data) {
       console.log(`${data}`)
+      $('#order')[0].reset();
     },
     error: function (jqXHR, errorThrown) {
-      console.log('ERROR ' + errorThrown);
+      console.log('ERROR ' + errorThrown + ' ' + jqXHR);
     }
   })
 })
@@ -301,16 +291,16 @@ function changeStatus(text, id) {
   })
 }
 
-// доделать  !!!!!!!!!!!!
 // настройка полосы диапазона цен при смене страниц
 function changeRange(min, max) {
-  // $(".range__line").slider("option", "values", [min, max]);
-  // $(".range__line").slider("values", [55, 105]);
-  $(".range__line").slider({
-    change: function (event, ui) {
-      $(".range__line").slider("values", [min, max]);
-    }
-    // $( ".range__line" ).on( "slidechange", function( event, ui ) {} );
-  });
-
+  $(".range__line").slider("option", "values", [min, max]);
+  $('.min-price').text($('.range__line').slider('values', 0) + ' руб.');
+  $('.max-price').text($('.range__line').slider('values', 1) + ' руб.');
+}
+const urlParams = new URLSearchParams(location.search);
+if (urlParams.has('min') && urlParams.has('max')) {
+  let min = urlParams.get('min')
+  let max = urlParams.get('max')
+  console.log(min + ' ' + max)
+  changeRange(min, max)
 }
