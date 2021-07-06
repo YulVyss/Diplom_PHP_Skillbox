@@ -4,11 +4,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/include/login.php';
 
 // добавление нового товара
 if($_POST['add']) {
-  
   $product_name = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-name']));
   $product_price = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-price']));
   $product_photo = ($_FILES ["product-photo"]['name'])?? 'product.jpg';
-  $product_section = str_split($_POST['category']);
+  $product_section = explode(',', $_POST['category']);
   
   if(isset($_POST['new'])){
     $new = '1';

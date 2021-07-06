@@ -6,7 +6,7 @@ $isAuth = false;
 $current_login = htmlspecialchars($_POST['current_login'] ?? '');
 $current_password = htmlspecialchars($_POST['current_password'] ?? '');
 
-if (!empty($_POST['current_login'] && !empty($_POST['current_password']))) {
+if (isset($_POST['current_login']) && isset($_POST['current_password']) && !empty($_POST['current_login'] && !empty($_POST['current_password']))) {
      // проверка логина и пароля
     $query = mysqli_query($connect,"SELECT * FROM users WHERE login ='".mysqli_real_escape_string($connect, $_POST['current_login'])."' LIMIT 1");
     $data = mysqli_fetch_assoc($query);

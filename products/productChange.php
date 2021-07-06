@@ -4,7 +4,17 @@ if (!isset($_COOKIE['authorized'])) {
   exit();
 }
 include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
-
+if(isset($_GET)) {
+  $name = $_GET['name'];
+  $price = $_GET['price'];
+  $section = $_GET['section'];
+  $new = $_GET['new'] ?? '';  
+  if($new === '') {
+    $checked = '';
+  } else {
+    $checked = 'checked';
+  }
+}
 
 ?>
 <main class="page-add">  
@@ -13,14 +23,14 @@ include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
     <fieldset class="page-add__group custom-form__group">
       <legend class="page-add__small-title custom-form__title">Данные о товаре</legend>
       <label for="product-name" class="custom-form__input-wrapper page-add__first-wrapper">
-        <input type="text" class="custom-form__input" name="product-name" id="product-name" required>
-        <p class="custom-form__input-label">
+        <input type="text" class="custom-form__input" name="product-name" id="product-name" required value=<?=$name?>>
+        <p class="custom-form__input-label" hidden>
           Название товара
         </p>
       </label>
       <label for="product-price" class="custom-form__input-wrapper">
-        <input type="text" class="custom-form__input" name="product-price" id="product-price" required>
-        <p class="custom-form__input-label">
+        <input type="text" class="custom-form__input" name="product-price" id="product-price" required value=<?=$price?>>
+        <p class="custom-form__input-label" hidden>
           Цена товара
         </p>
       </label>
@@ -38,12 +48,12 @@ include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
     <fieldset class="page-add__group custom-form__group">
       <legend class="page-add__small-title custom-form__title">Раздел</legend>
       <div class="page-add__select">
-        <select name="category" id="category" class="custom-form__select" multiple="multiple">
+        <select name="category" id="category" class="custom-form__select">
           <option name='<?php getSectionName($connect) ?>'  hidden="">Название раздела</option>
-          <?php getSectionName($connect) ?>
+          <?php getSectionName($connect, $section); ?>
         </select>
       </div>
-      <input type="checkbox" name="new" id="new" class="custom-form__checkbox" >
+      <input type="checkbox" name="new" id="new" class="custom-form__checkbox" <?=$checked?>>
       <label for="new" class="custom-form__checkbox-label">Новинка</label>
       <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox">
       <label for="sale" class="custom-form__checkbox-label">Распродажа</label>

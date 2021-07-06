@@ -12,7 +12,7 @@ if(isset($_GET['page']) && ($_GET['page'])){
 } else {
   $start = 0;
   $counter = getCounter($connect, 'SELECT COUNT(*) FROM products ');
-  $products = getAllProducts($connect, $num, $start);
+  $products = getAllProducts($connect, $num, $start, '');
 }
 $str_pag = ceil($counter / $num);
 

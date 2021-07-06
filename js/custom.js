@@ -1,6 +1,13 @@
 // форма добавления товара в БД во вкладке администратора
 $("#addProduct").submit(function (e) {
   e.preventDefault();
+  if ($('#category').val() === null) {
+    return alert('Выберите категорию товара')
+  }
+  if ($('#product-photo').val() === '') {
+    return alert('Выберите изображение товара')
+  }
+
   let form = document.getElementById('addProduct')
   let product = new FormData(form)
   let cat = []
@@ -228,6 +235,9 @@ $('#changeProduct').submit(function (e) {
   product.append('id', id)
   product.append('change', 'product')
 
+  const prodName = document.querySelector('.product__added')
+  const popupEnd = document.querySelector('.page-add__popup-end')
+
   $.ajax({
     type: "POST",
     url: '/products/form.php',
@@ -237,13 +247,12 @@ $('#changeProduct').submit(function (e) {
     processData: false,
     success: function (data) {
       form.hidden = true;
-      const prodName = document.querySelector('.product__added')
-      const popupEnd = document.querySelector('.page-add__popup-end')
       prodName.innerHTML = `${data}`
       popupEnd.hidden = false;
     },
     error: function (jqXHR, errorThrown) {
-      console.log('ERROR ' + errorThrown + jqXHR);
+      prodName.innerHTML = 'ERROR ' + errorThrown + jqXHR;
+      popupEnd.hidden = true;
     }
   })
 })

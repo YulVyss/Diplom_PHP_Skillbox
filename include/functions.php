@@ -20,12 +20,12 @@ function createUser($connect, $name, $login, $password, $rights) {
 // createUser($connect, 'operator2', 'operator2@fashion.ru', '33p2eh84', 'operator');
 
 // получение из БД всех продуктов 
-function getAllProducts($connect, $num, $start) {
+function getAllProducts($connect, $num, $start, $sort = 'ORDER BY id ASC') {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        return mysqli_query($connect, "SELECT * from products LIMIT $num OFFSET $start");
+        return mysqli_query($connect, "SELECT * from products $sort LIMIT $num OFFSET $start ");
     }
 }
 
@@ -71,7 +71,6 @@ function showProducts($products) {
     } 
 }
 
-
 // получение названия категории
 function getSection($connect, $section){
     $section_names = mysqli_query($connect, "SELECT name from sections where id='$section' LIMIT 1");
@@ -91,9 +90,9 @@ function showProductsAdm($connect, $products) {
         $section = $row['category_id'];
         $new = $row['new'];
         if($new==1){
-            $new='Да';
+            $newText='Да';
         } else {
-            $new='Нет';
+            $newText='Нет';
         }
         ?>
         <li class="product-item page-products__item">
@@ -101,18 +100,23 @@ function showProductsAdm($connect, $products) {
             <span class="product-item__field product-id"><?=$ID?></span>
             <span class="product-item__field product-price"><?=$price?></span>
             <span class="product-item__field product-category"><?=getSection($connect, $section); ?></span>
-            <span class="product-item__field product-new"><?=$new?></span>
-            <a href="/products/productChange.php?id=<?=$ID?>" class="product-item__edit" aria-label="Редактировать"></a>
+            <span class="product-item__field product-new"><?=$newText?></span>
+            <a href="/products/productChange.php?id=<?=$ID?>&name='<?=$name?>'&price=<?=$price?>&section=<?=$section?>&new=<?=$new?>" class="product-item__edit" aria-label="Редактировать"></a>
             <button class="product-item__delete"></button>
         </li>
     <?php } 
 }
 
 // получение и вывод списка категорий во вкладке создание продукта
-function getSectionName($connect) {
+function getSectionName($connect, $sectionId = '') {
     $result = mysqli_query($connect, "SELECT * from sections");
-    while($row = mysqli_fetch_assoc($result)) { ?>
-        <option value="<?=$row['id']?>"><?=$row['name']?></option>
+    while($row = mysqli_fetch_assoc($result)) { 
+        $selected = '';
+        if($row['id'] === $sectionId) {
+            $selected = 'selected';
+        }
+        ?>
+        <option value="<?=$row['id']?>" <?=$selected?> ><?=$row['name']?></option>
     <?php }
 }
 
@@ -125,7 +129,6 @@ function addNewProduct($connect, $name, $price, $photo, $section, $new, $sale) {
     } else {
         mysqli_query($connect, "INSERT into products (name, price, activity, img, new, sale, category_id)
         values ('$name', '$price', '1', '$photo', '$new', '$sale', '$section')");
-        exit();
     }
   }
 
@@ -281,7 +284,7 @@ function getOrders($connect) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        return mysqli_query($connect, "SELECT * from orders ORDER BY status DESC, id ASC");
+        return mysqli_query($connect, "SELECT * from orders ORDER BY status DESC, date DESC");
     }
 }
 

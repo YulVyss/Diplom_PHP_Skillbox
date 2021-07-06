@@ -23,14 +23,14 @@ $productsOnPage = 10;
 
 if(isset($_GET['page']) && $_GET['page'] !== ''){
   $start = ($_GET['page'] * $productsOnPage) - $productsOnPage;
-  $req = getRequest($_GET, $productsOnPage, $start, "SELECT * from products ");  
+  $req = getRequest($_GET, $productsOnPage, $start, "SELECT * from products ORDER BY id DESC ");  
   $count = getRequest($_GET, $productsOnPage, $start, "SELECT COUNT(*) from products ");
   $counter = getCounter($connect, $count);
   $products = getFilterCategoryProducts($connect, $req);    
 } else {
   $start = 0;
   $counter = getCounter($connect, 'SELECT COUNT(*) FROM products ');
-  $products = getAllProducts($connect, $productsOnPage, $start);
+  $products = getAllProducts($connect, $productsOnPage, $start, 'ORDER BY id DESC');
 }
 
 $str_pag = ceil($counter / $productsOnPage);
