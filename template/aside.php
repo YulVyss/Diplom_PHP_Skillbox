@@ -58,15 +58,34 @@
         <div class="shop__sorting-item custom-form__select-wrapper">
           <select class="custom-form__select" name="category" id="sortBy">
             <option hidden="">Сортировка</option>
-            <?php echo ($_REQUEST['sort'] == 'sortByPrice') ? '<option class="option" value="sortByPrice" selected>По цене</option>' : '<option class="option" value="sortByPrice">По цене</option>'; ?>
-            <?php echo ($_REQUEST['sort'] == 'sortByName') ? '<option class="option" value="sortByName" selected>По названию</option>' : '<option class="option" value="sortByName">По названию</option>'; ?>
+            <?php 
+            if(isset($_REQUEST['sort']) && $_REQUEST['sort'] == 'sortByPrice') { ?>
+              <option class="option" value="sortByPrice" selected>По цене</option>
+            <?php } else { ?>
+              <option class="option" value="sortByPrice">По цене</option>
+              <?php } 
+              if(isset($_REQUEST['sort']) && $_REQUEST['sort'] == 'sortByName') { ?>
+                <option class="option" value="sortByName" selected>По названию</option>         
+              <?php } else { ?>
+                <option class="option" value="sortByName">По названию</option>
+              <?php } ?>
           </select>
         </div>
         <div class="shop__sorting-item custom-form__select-wrapper">
           <select class="custom-form__select" name="prices" id="sortOrder">
             <option hidden="">Порядок</option>
-            <?php echo ($_REQUEST['order'] == 'on') ? '<option value="on" selected>По возрастанию</option>' : '<option value="on">По возрастанию</option>'; ?>
-            <?php echo ($_REQUEST['order'] == 'reverse') ? '<option value="reverse" selected>По убыванию</option>' : '<option value="reverse">По убыванию</option>'; ?>              
+            <?php 
+            if(isset($_REQUEST['order']) && $_REQUEST['order'] == 'on') { ?>
+              <option value="on" selected>По возрастанию</option>
+            <?php } else { ?>
+              <option value="on">По возрастанию</option>
+              <?php }  ?>
+              <?php 
+            if(isset($_REQUEST['order']) && $_REQUEST['order'] == 'reverse') { ?>
+              <option value="reverse" selected>По убыванию</option>
+            <?php } else { ?>
+              <option value="reverse">По убыванию</option>
+              <?php }  ?>        
           </select>
         </div>
         

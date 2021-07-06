@@ -257,6 +257,15 @@ if (addList) {
 
   checkList(addList, addButton);
 
+  if (window.location.pathname === "/products/productChange.php") {
+    const li = addList.querySelector('.add-list__item--active');
+    li.addEventListener('click', evt => {
+      addList.removeChild(evt.target);
+      addInput.value = '';
+      checkList(addList, addButton);
+    });
+  }
+
   addInput.addEventListener('change', evt => {
 
     const template = document.createElement('LI');

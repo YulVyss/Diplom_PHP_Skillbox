@@ -39,10 +39,18 @@ if(isset($_GET)) {
       <legend class="page-add__small-title custom-form__title">Фотография товара</legend>
       
       <ul class="add-list">
-        <li class="add-list__item add-list__item--add">
+        <li class="add-list__item add-list__item--add" hidden>
           <input type="file" name="product-photo" id="product-photo" hidden="">
           <label for="product-photo">Добавить фотографию</label>
         </li>
+      <?php 
+      if(isset($_GET['id']) &&$_GET['id'] > 0) { ?>
+        <li class="add-list__item add-list__item--active">
+          <img src="../img/products/<?=getImage($connect, $_GET['id']); ?>">
+        </li>
+      <?php } else { ?>
+        <li class="add-list__item add-list__item--add"></li>
+      <?php } ?>
       </ul>
     </fieldset>
     <fieldset class="page-add__group custom-form__group">

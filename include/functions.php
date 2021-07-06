@@ -130,7 +130,7 @@ function addNewProduct($connect, $name, $price, $photo, $section, $new, $sale) {
         mysqli_query($connect, "INSERT into products (name, price, activity, img, new, sale, category_id)
         values ('$name', '$price', '1', '$photo', '$new', '$sale', '$section')");
     }
-  }
+}
 
 // изменить продукт во вкладке администратора /products/productChange.php
 function editeProduct($connect, $id, $name, $price, $img, $new, $sale, $category) {
@@ -194,14 +194,14 @@ function build_http_query( $query ){
 
 // построение запроса в БД исходя из полученных данных
 function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
-    if(($data['page'])){
+    if(isset($data['page']) && $data['page'] !== ''){
         $start = ($data['page'] * $num) - $num;
     } else {
         $start = 0;
     }    
     $req = $reqStart;
-   
-    if(isset($data['category'])){  
+
+    if(isset($data['category']) && $data['category'] !== ''){  
         $req .= 'where ';         
         $category = $data['category']?? 0;
         $min = $data['min']?? 0;
@@ -218,16 +218,17 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
             $req .= 'new='.$newP. " and ";
         }    
         $req .= ' price between '.$min.' and '.$max;        
-    }  
+    }
+    
     if(!isset($data['category']) && isset($data['new'])) {
         $req .= " where new=1 ";
     }
+
     if(!isset($data['category']) && isset($data['sale'])) {
         $req .= " where sale=1 ";
-    }
-      
+    }      
         
-    if(isset($data['sort']) && $data['sort']){
+    if(isset($data['sort']) && $data['sort'] !== ''){
         if($data['sort'] == 'sortByName' && $data['order'] == 'on'){
             $req .= " ORDER BY name ASC ";
         } elseif($data['sort'] == 'sortByName' && $data['order'] == 'reverse'){
@@ -254,16 +255,16 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
 function getSectionList($connect) {
     $result = mysqli_query($connect, "SELECT * from sections");
     while($row = mysqli_fetch_assoc($result)) { 
-      if(isset($_GET['category']) && $_GET['category'] == $row['id']){
-        $active = 'active';
-      } else{
-        $active = 'AAA';
-      }
-      ?>
-      <li>
-        <a class="filter__list-item <?=$active?>" href="/?category=<?=$row['id']?>" name="<?=$row['id']?>"><?=$row['name']?></a>
-      </li>
-        <?php }  
+    if(isset($_GET['category']) && $_GET['category'] == $row['id']){
+    $active = 'active';
+    } else{
+    $active = 'AAA';
+    }
+    ?>
+    <li>
+    <a class="filter__list-item <?=$active?>" href="/?category=<?=$row['id']?>" name="<?=$row['id']?>"><?=$row['name']?></a>
+    </li>
+    <?php }  
 }
 
 // добавление нового продукта в БД во вкладке администратора /products/form.php
@@ -289,83 +290,97 @@ function getOrders($connect) {
 }
 
 // Вывод всех заказов
-  function showOrders($connect, $orders) {
-    while($row = mysqli_fetch_assoc($orders)) { 
-        $id = $row['id'];
-        $name = $row['user-name'];
-        $phone = $row['phone'];
-        $delivery = $row['delivery']; 
-        $payment = $row['payment'];
-        $comments = $row['comments'];
-        $city = $row['city'];
-        $street = $row['street'];
-        $home = $row['home'];
-        $aprt = $row['aprt'];
-        $status = $row['status'];
-        $prodPrice = $row['price'];  
-    ?>
-    <li class="order-item page-order__item">
-      <div class="order-item__wrapper">
-        <div class="order-item__group order-item__group--id">
-          <span class="order-item__title">Номер заказа</span>
-          <span class="order-item__info order-item__info--id"><?=$id?></span>
-        </div>
-        <div class="order-item__group">
-          <span class="order-item__title">Сумма заказа</span>
-          <?=$prodPrice?>
-        </div>
-        <button class="order-item__toggle"></button>
-      </div>
-      <div class="order-item__wrapper">
-        <div class="order-item__group order-item__group--margin">
-          <span class="order-item__title">Заказчик</span>
-          <span class="order-item__info"><?=$name?></span>
-        </div>
-        <div class="order-item__group">
-          <span class="order-item__title">Номер телефона</span>
-          <span class="order-item__info"><?=$phone?></span>
-        </div>
-        <div class="order-item__group">
-          <span class="order-item__title">Способ доставки</span>
-          <span class="order-item__info"><?=$delivery?></span>
-        </div>
-        <div class="order-item__group">
-          <span class="order-item__title">Способ оплаты</span>
-          <span class="order-item__info"><?=$payment?></span>
-        </div>
-        <div class="order-item__group order-item__group--status">
-          <span class="order-item__title">Статус заказа</span>
-          <?php 
-          if($status == 'Выполнено') { ?>
-            <span class="order-item__info order-item__info--yes"><?=$status?></span>
-          <?php } else { ?>
-              <span class="order-item__info order-item__info--no"><?=$status?></span>
-          <?php } ?>          
-          <button class="order-item__btn">Изменить</button>
-        </div>
-      </div>
-      <div class="order-item__wrapper">
-        <div class="order-item__group">
-          <span class="order-item__title">Адрес доставки</span>
-          <span class="order-item__info">г. <?=$city?>, ул. <?=$street?>, д.<?=$home?>, кв. <?=$aprt?></span>
-        </div>
-      </div>
-      <div class="order-item__wrapper">
-        <div class="order-item__group">
-          <span class="order-item__title">Комментарий к заказу</span>
-          <span class="order-item__info"><?=$comments?></span>
-        </div>
-      </div>
-    </li>
-    <?php
-    }
-  }
+function showOrders($connect, $orders) {
+while($row = mysqli_fetch_assoc($orders)) { 
+    $id = $row['id'];
+    $name = $row['user-name'];
+    $phone = $row['phone'];
+    $delivery = $row['delivery']; 
+    $payment = $row['payment'];
+    $comments = $row['comments'];
+    $city = $row['city'];
+    $street = $row['street'];
+    $home = $row['home'];
+    $aprt = $row['aprt'];
+    $status = $row['status'];
+    $prodPrice = $row['price'];  
+?>
+<li class="order-item page-order__item">
+    <div class="order-item__wrapper">
+    <div class="order-item__group order-item__group--id">
+        <span class="order-item__title">Номер заказа</span>
+        <span class="order-item__info order-item__info--id"><?=$id?></span>
+    </div>
+    <div class="order-item__group">
+        <span class="order-item__title">Сумма заказа</span>
+        <?=$prodPrice?>
+    </div>
+    <button class="order-item__toggle"></button>
+    </div>
+    <div class="order-item__wrapper">
+    <div class="order-item__group order-item__group--margin">
+        <span class="order-item__title">Заказчик</span>
+        <span class="order-item__info"><?=$name?></span>
+    </div>
+    <div class="order-item__group">
+        <span class="order-item__title">Номер телефона</span>
+        <span class="order-item__info"><?=$phone?></span>
+    </div>
+    <div class="order-item__group">
+        <span class="order-item__title">Способ доставки</span>
+        <span class="order-item__info"><?=$delivery?></span>
+    </div>
+    <div class="order-item__group">
+        <span class="order-item__title">Способ оплаты</span>
+        <span class="order-item__info"><?=$payment?></span>
+    </div>
+    <div class="order-item__group order-item__group--status">
+        <span class="order-item__title">Статус заказа</span>
+        <?php 
+        if($status == 'Выполнено') { ?>
+        <span class="order-item__info order-item__info--yes"><?=$status?></span>
+        <?php } else { ?>
+            <span class="order-item__info order-item__info--no"><?=$status?></span>
+        <?php } ?>          
+        <button class="order-item__btn">Изменить</button>
+    </div>
+    </div>
+    <div class="order-item__wrapper">
+    <div class="order-item__group">
+        <span class="order-item__title">Адрес доставки</span>
+        <span class="order-item__info">г. <?=$city?>, ул. <?=$street?>, д.<?=$home?>, кв. <?=$aprt?></span>
+    </div>
+    </div>
+    <div class="order-item__wrapper">
+    <div class="order-item__group">
+        <span class="order-item__title">Комментарий к заказу</span>
+        <span class="order-item__info"><?=$comments?></span>
+    </div>
+    </div>
+</li>
+<?php
+}
+}
 
 // получить цену за товар по номеру id
-  function getProdPrice($connect, $id) {
+function getProdPrice($connect, $id) {
     $result = mysqli_query($connect, "SELECT price from products where id=$id");
     while($row = mysqli_fetch_assoc($result)) {
         return $row['price'];
     }
 }
+
+// получение названия файла изображения продукта
+function getImage($connect, $id) {
+    if (mysqli_connect_errno()) {
+        $err = "Ошибка ".mysqli_connect_error();
+        exit();
+    } else {
+        $result = mysqli_query($connect, "SELECT img from products where id = '$id'");
+        while($row = mysqli_fetch_assoc($result)) {
+            return $row['img'];
+        }
+    }
+}
+
 
