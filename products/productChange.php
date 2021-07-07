@@ -4,18 +4,23 @@ if (!isset($_COOKIE['authorized'])) {
   exit();
 }
 include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
-if(isset($_GET)) {
-  $name = $_GET['name'];
-  $price = $_GET['price'];
-  $section = $_GET['section'];
-  $new = $_GET['new'] ?? '';  
-  if($new === '') {
-    $checked = '';
-  } else {
-    $checked = 'checked';
+
+if(isset($_GET['id']) && $_GET['id'] > 0) {
+  $id = $_GET['id'];
+  $data = mysqli_query($connect, "SELECT * from products where id='$id' ");
+  while($row = mysqli_fetch_assoc($data)) {
+    $name = $row['name'];
+    $price = $row['price'];
+    $section = $row['category_id'];
+    $new = $row['new'];
+      
+    if($new === 0) {
+      $checked = '';
+    } else {
+      $checked = 'checked';
+    }
   }
 }
-
 ?>
 <main class="page-add">  
   <h1 class="h h--1">Изменение товара</h1>

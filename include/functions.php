@@ -101,7 +101,7 @@ function showProductsAdm($connect, $products) {
             <span class="product-item__field product-price"><?=$price?></span>
             <span class="product-item__field product-category"><?=getSection($connect, $section); ?></span>
             <span class="product-item__field product-new"><?=$newText?></span>
-            <a href="/products/productChange.php?id=<?=$ID?>&name='<?=$name?>'&price=<?=$price?>&section=<?=$section?>&new=<?=$new?>" class="product-item__edit" aria-label="Редактировать"></a>
+            <a href="/products/productChange.php?id=<?=$ID?>" class="product-item__edit" aria-label="Редактировать"></a>
             <button class="product-item__delete"></button>
         </li>
     <?php } 
@@ -285,7 +285,7 @@ function getOrders($connect) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        return mysqli_query($connect, "SELECT * from orders ORDER BY status DESC, date DESC");
+        return mysqli_query($connect, "SELECT * from orders ORDER BY status DESC, id DESC");
     }
 }
 

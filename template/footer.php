@@ -9,10 +9,10 @@
           <a class="main-menu__item" href="/">Главная</a>
         </li>
         <li>
-          <a class="main-menu__item new" href="#">Новинки</a>
+          <a class="main-menu__item new <?= isCurrentUrl('/new.php') ? 'active' : '' ?>" href="/new.php">Новинки</a>
         </li>
         <li>
-          <a class="main-menu__item sale" href="#">Sale</a>
+          <a class="main-menu__item sale <?= isCurrentUrl('/sale.php') ? 'active' : '' ?>" href="/sale.php">Sale</a>
         </li>
         <li>
           <a class="main-menu__item" href="/delivery.php">Доставка</a>
