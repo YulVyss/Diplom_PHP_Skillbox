@@ -28,7 +28,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0) {
     <fieldset class="page-add__group custom-form__group">
       <legend class="page-add__small-title custom-form__title">Данные о товаре</legend>
       <label for="product-name" class="custom-form__input-wrapper page-add__first-wrapper">
-        <input type="text" class="custom-form__input" name="product-name" id="product-name" required value=<?=$name?>>
+        <input type="text" class="custom-form__input" name="product-name" id="product-name" required value='<?=$name ?>'>
         <p class="custom-form__input-label" hidden>
           Название товара
         </p>

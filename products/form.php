@@ -3,7 +3,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/include/login.php';
 
 // добавление нового товара
-if($_POST['add']) {
+if(isset($_POST['add'])) {
   $product_name = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-name']));
   $product_price = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-price']));
   $product_photo = ($_FILES ["product-photo"]['name'])?? 'product.jpg';
@@ -26,11 +26,15 @@ if($_POST['add']) {
 }
 
 // изменение товара
-if($_POST['change']){
+if(isset($_POST['change']) && $_POST['change'] === 'product'){
   $ID = $_POST['id'];
   $product_name = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-name']));
   $product_price = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-price']));
-  $product_photo = ($_FILES ["product-photo"]['name'])?? 'product.jpg';
+  if(isset($_FILES ["product-photo"]['name']) && $_FILES ["product-photo"]['name'] !== '') {
+    $product_photo = $_FILES ["product-photo"]['name'];
+  } else {
+    $product_photo = getImage($connect, $ID);
+  }
   $product_section = $_POST['category'];
   if(isset($_POST['new'])){
     $new = '1';
@@ -49,28 +53,40 @@ if($_POST['change']){
 // оформление заказа
 if(isset($_POST['prod-id']) && $_POST['prod-id'] !== '') {
   $date = date("Y-m-d H:i:s");
-  $name = $_POST['name'];
-  $surname = $_POST['surname'];
-  $thirdname = $_POST['thirdname'] ?? '';  
-  $email = $_POST['email'];
-  $phone = $_POST['phone'];
+  $name =  mysqli_real_escape_string($connect, clean($_POST['name']));
+  $surname = mysqli_real_escape_string($connect, clean($_POST['surname']));
+  $thirdname = mysqli_real_escape_string($connect, clean($_POST['thirdname']));
+  $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+  $phone = mysqli_real_escape_string($connect, clean($_POST['phone']));
   $delivery = $_POST['delivery'];
   $payment = $_POST['pay'];
   $status = 'Не выполнено';
-  $comments = $_POST['comment'] ?? '';
-  $city = $_POST['city'] ?? '';
-  $street = $_POST['street'] ?? '';
-  $home = $_POST['home'] ?? '';
-  $aprt = $_POST['aprt'] ?? '';
+  $comments = mysqli_real_escape_string($connect, clean($_POST['comment'])) ?? '';
+  $city = mysqli_real_escape_string($connect, clean($_POST['city'])) ?? '';
+  $street = mysqli_real_escape_string($connect, clean($_POST['street'])) ?? '';
+  $home = mysqli_real_escape_string($connect, clean($_POST['home'])) ?? '';
+  $aprt = mysqli_real_escape_string($connect, clean($_POST['aprt'])) ?? '';
   $productId = $_POST['prod-id'];
   $productPrice = $_POST['prod-price'];
-  if($name == '' || $surname == '' || $email == '' || $phone == ''){
-    echo $err = 'ошибка валидации';
+  if($name === '' || $surname === '' || $email === '' || $phone === '') {    
+    echo json_encode($err = 'ошибка в заполнении формы');
     exit();
   }
-  if($productPrice <= $minsum && $delivery === 'Курьерная доставка') {
-    $productPrice += $delivery;
+  if(check_length($phone, 11, 12) && check_length($name, 2, 50) && check_length($surname, 2, 50)) {
+    if(!check_length($email, 5, 100)) {
+      echo json_encode($err = 'ошибка в email');
+      exit();
+    }
+    if($productPrice <= $minsum && $delivery === 'Курьерная доставка') {
+      $productPrice += $delivery;      
+    }
+    echo json_encode($productPrice);
+   
+  }  else {
+    echo json_encode($err = 'ошибка в заполнении формы');
+    exit();
   }
+  
   addNewOrder($connect, $date, $productPrice, $name, $surname, $thirdname, $email, $phone, $delivery, $payment, $status, $comments, $city, $street, $home, $aprt, $productId);
-  echo json_encode($productPrice);
+  
 }

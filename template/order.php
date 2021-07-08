@@ -11,24 +11,24 @@
           <input type="text" name="prod-price" class="prod-price" hidden>
           <div class="custom-form__column">
             <label class="custom-form__input-wrapper" for="surname">
-              <input id="surname" class="custom-form__input" type="text" name="surname" required="">
-              <p class="custom-form__input-label">Фамилия <span class="req">*</span></p>
+              <input id="surname" class="custom-form__input" type="text" name="surname" placeholder="Фамилия" required="">
+              <p class="custom-form__input-label"> <span class="req">*</span></p>
             </label>
             <label class="custom-form__input-wrapper" for="name">
-              <input id="name" class="custom-form__input" type="text" name="name" required="">
-              <p class="custom-form__input-label">Имя <span class="req">*</span></p>
+              <input id="name" class="custom-form__input" type="text" name="name" placeholder="Имя" required="">
+              <p class="custom-form__input-label"><span class="req">*</span></p>
             </label>
             <label class="custom-form__input-wrapper" for="thirdName">
-              <input id="thirdName" class="custom-form__input" type="text" name="thirdName">
-              <p class="custom-form__input-label">Отчество</p>
+              <input id="thirdName" class="custom-form__input" type="text" placeholder="Отчество" name="thirdName">
+              <p class="custom-form__input-label"></p>
             </label>
             <label class="custom-form__input-wrapper" for="phone">
-              <input id="phone" class="custom-form__input" type="tel" name="phone" required="">
-              <p class="custom-form__input-label">Телефон <span class="req">*</span></p>
+              <input id="phone" class="custom-form__input" type="tel" name="phone" placeholder="Телефон" required="">
+              <p class="custom-form__input-label"><span class="req">*</span></p>
             </label>
             <label class="custom-form__input-wrapper" for="email">
-              <input id="email" class="custom-form__input" type="email" name="email" required="">
-              <p class="custom-form__input-label">Почта <span class="req">*</span></p>
+              <input id="email" class="custom-form__input" type="email" name="email" placeholder="Почта" required="">
+              <p class="custom-form__input-label"> <span class="req">*</span></p>
             </label>
           </div>
         </fieldset>

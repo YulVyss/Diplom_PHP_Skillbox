@@ -234,7 +234,9 @@ $('#changeProduct').submit(function (e) {
   let product = new FormData(form)
   product.append('id', id)
   product.append('change', 'product')
-
+  for (let [name, value] of product) {
+    console.log(`${name} = ${value}`);
+  }
   const prodName = document.querySelector('.product__added')
   const popupEnd = document.querySelector('.page-add__popup-end')
 
@@ -265,6 +267,9 @@ $('#btn-order').click(function (e) {
   for (let [name, value] of data) {
     console.log(`${name} = ${value}`);
   }
+  const popupEnd = document.querySelector('.shop-page__popup-end');
+  const shopOrder = document.querySelector('.shop-page__order');
+
   $.ajax({
     url: '/products/form.php',
     data: data,
@@ -273,10 +278,19 @@ $('#btn-order').click(function (e) {
     contentType: false,
     processData: false,
     success: function (data) {
-      console.log(`${data}`)
-      $('#order')[0].reset();
+      if (data === 'ошибка в заполнении формы' || data === 'ошибка в email') {
+        alert(data)
+      } else {
+        console.log(`${data}`)
+        toggleHidden(shopOrder, popupEnd);
+        popupEnd.classList.add('fade');
+        setTimeout(() => popupEnd.classList.remove('fade'), 1000);
+        $('#order')[0].reset()
+      }
+
     },
     error: function (jqXHR, errorThrown) {
+      alert('Произошла ошибка при заполнении формы')
       console.log('ERROR ' + errorThrown + ' ' + jqXHR);
     }
   })

@@ -294,6 +294,8 @@ function showOrders($connect, $orders) {
 while($row = mysqli_fetch_assoc($orders)) { 
     $id = $row['id'];
     $name = $row['user-name'];
+    $surname = $row['user-surname'];
+    $thirdname = $row['user-thirdname'];
     $phone = $row['phone'];
     $delivery = $row['delivery']; 
     $payment = $row['payment'];
@@ -320,7 +322,7 @@ while($row = mysqli_fetch_assoc($orders)) {
     <div class="order-item__wrapper">
     <div class="order-item__group order-item__group--margin">
         <span class="order-item__title">Заказчик</span>
-        <span class="order-item__info"><?=$name?></span>
+        <span class="order-item__info"><?=$name?> <?=$thirdname?> <?=$surname?></span>
     </div>
     <div class="order-item__group">
         <span class="order-item__title">Номер телефона</span>
@@ -383,4 +385,43 @@ function getImage($connect, $id) {
     }
 }
 
+// функции валидации формы
+
+function clean($value = "") {
+    $value = trim($value);
+    $value = stripslashes($value);
+    $value = strip_tags($value);
+    $value = htmlspecialchars($value);
+    
+    return $value;
+}
+
+function check_length($value = "", $min, $max) {
+    $result = (mb_strlen($value) < $min || mb_strlen($value) > $max);
+    return !$result;
+}
+
+function getMaxRange($connect) {
+    if (mysqli_connect_errno()) {
+        $err = "Ошибка ".mysqli_connect_error();
+        exit();
+    } else {
+        $max = mysqli_query($connect, "SELECT MAX(price) from products");
+        while($row = mysqli_fetch_assoc($max)) {
+            return $row['MAX(price)'];
+        }
+    }
+}
+
+function getMinRange($connect) {
+    if (mysqli_connect_errno()) {
+        $err = "Ошибка ".mysqli_connect_error();
+        exit();
+    } else {
+        $max = mysqli_query($connect, "SELECT MIN(price) from products");
+        while($row = mysqli_fetch_assoc($max)) {
+            return $row['MIN(price)'];
+        }
+    }
+}
 

@@ -52,7 +52,7 @@ if(isset($_POST['id']) && $_POST['id']) {
   </div>
   <ul class="page-products__list">
     <?php 
-    if($products){          
+    if(isset($products)){          
       showProductsAdm($connect, $products);
     }   
     ?>

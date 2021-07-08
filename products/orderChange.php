@@ -2,7 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
 
 // изменение статуса заказа во вкладке Заказы
-if($_POST['statusOrder']) {
+if(isset($_POST['statusOrder'])) {
     $status = $_POST['statusOrder'];
     $id = $_POST['id'];
     if (mysqli_connect_errno()) {

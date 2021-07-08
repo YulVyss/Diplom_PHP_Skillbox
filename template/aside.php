@@ -30,8 +30,8 @@
             <span class="range__info">Цена</span>
             <div class="range__line" aria-label="Range Line"></div>
             <div class="range__res">
-              <span class="range__res-item min-price">350 руб.</span>
-              <span class="range__res-item max-price">32000 руб.</span>
+              <span class="range__res-item min-price"><?=getMinRange($connect)?> руб.</span>
+              <span class="range__res-item max-price"><?=getMaxRange($connect)?> руб.</span>
             </div>
           </div>
         </div>

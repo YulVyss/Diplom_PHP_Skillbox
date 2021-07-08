@@ -157,10 +157,10 @@ if (shopList) {
 
           evt.preventDefault();
 
-          toggleHidden(shopOrder, popupEnd);
+          // toggleHidden(shopOrder, popupEnd);
 
-          popupEnd.classList.add('fade');
-          setTimeout(() => popupEnd.classList.remove('fade'), 1000);
+          // popupEnd.classList.add('fade');
+          // setTimeout(() => popupEnd.classList.remove('fade'), 1000);
 
           window.scroll(0, 0);
 

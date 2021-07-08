@@ -22,7 +22,7 @@ $str_pag = ceil($counter / $num);
     <section class="shop__list">
     
       <?php 
-        if($products){          
+        if(isset($products)){          
           showProducts($products);
         }         
       ?>
