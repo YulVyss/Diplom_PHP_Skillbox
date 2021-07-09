@@ -425,3 +425,8 @@ function getMinRange($connect) {
     }
 }
 
+function getDeliveryDate($interval) {
+    $date = new DateTime();
+    $date->modify('+'.$interval.' day');
+    echo $date->format('d / m');
+}

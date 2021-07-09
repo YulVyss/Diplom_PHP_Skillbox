@@ -31,9 +31,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
       <li>
         <a class="main-menu__item" href="/">Главная</a>
       </li>
-      <li>
-        <a class="main-menu__item" href="?logout=on">Выйти</a>
-      </li>
+      
     </ul>
   </nav>
 </header>

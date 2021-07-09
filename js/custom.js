@@ -278,14 +278,14 @@ $('#btn-order').click(function (e) {
     contentType: false,
     processData: false,
     success: function (data) {
-      if (data === 'ошибка в заполнении формы' || data === 'ошибка в email') {
-        alert(data)
-      } else {
-        console.log(`${data}`)
+      if (parseInt(data) > 0) {
+        $('.order-summ').html(`${data}`)
         toggleHidden(shopOrder, popupEnd);
         popupEnd.classList.add('fade');
         setTimeout(() => popupEnd.classList.remove('fade'), 1000);
         $('#order')[0].reset()
+      } else {
+        alert(data)
       }
 
     },

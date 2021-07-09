@@ -68,25 +68,26 @@ if(isset($_POST['prod-id']) && $_POST['prod-id'] !== '') {
   $aprt = mysqli_real_escape_string($connect, clean($_POST['aprt'])) ?? '';
   $productId = $_POST['prod-id'];
   $productPrice = $_POST['prod-price'];
-  if($name === '' || $surname === '' || $email === '' || $phone === '') {    
-    echo json_encode($err = 'ошибка в заполнении формы');
-    exit();
-  }
-  if(check_length($phone, 11, 12) && check_length($name, 2, 50) && check_length($surname, 2, 50)) {
-    if(!check_length($email, 5, 100)) {
-      echo json_encode($err = 'ошибка в email');
-      exit();
-    }
-    if($productPrice <= $minsum && $delivery === 'Курьерная доставка') {
-      $productPrice += $delivery;      
-    }
-    echo json_encode($productPrice);
-   
-  }  else {
-    echo json_encode($err = 'ошибка в заполнении формы');
-    exit();
-  }
   
+  if(!check_length($phone, 11, 12) || $phone === '') {
+    echo json_encode($err = 'Допущена ошибка в номере телефона');
+    exit();
+  }
+  if(!check_length($email, 5, 100) || $email === '') {
+    echo json_encode($err = 'Допущена ошибка в email');
+    exit();
+  }
+  if(!check_length($name, 2, 50) || $name === '') {
+    echo json_encode($err = 'Допущена ошибка в написании имени');
+    exit();
+  }
+  if(!check_length($surname, 2, 50)) {
+    echo json_encode($err = 'Допущена ошибка в написании фамилии');
+    exit();
+  }
+  if($productPrice <= $minsum && $delivery === 'Курьерная доставка') {
+    $productPrice += $delivery;      
+  }
   addNewOrder($connect, $date, $productPrice, $name, $surname, $thirdname, $email, $phone, $delivery, $payment, $status, $comments, $city, $street, $home, $aprt, $productId);
-  
+  echo json_encode($productPrice);
 }

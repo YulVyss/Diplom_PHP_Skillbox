@@ -28,6 +28,8 @@
           <b class="filter__title">Фильтры</b>
           <div class="filter__range range">
             <span class="range__info">Цена</span>
+            <span class="range__info min-range" hidden><?=getMinRange($connect)?></span>
+            <span class="range__info max-range" hidden><?=getMaxRange($connect)?></span>
             <div class="range__line" aria-label="Range Line"></div>
             <div class="range__res">
               <span class="range__res-item min-price"><?=getMinRange($connect)?> руб.</span>

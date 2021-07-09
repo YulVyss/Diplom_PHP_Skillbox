@@ -316,11 +316,13 @@ if (productsList) {
 
 // jquery range maxmin
 if (document.querySelector('.shop-page')) {
-
+  const min = +$('.min-range').html()
+  const max = +$('.max-range').html()
+  console.log(min + ' ' + max)
   $('.range__line').slider({
-    min: 350,
-    max: 32000,
-    values: [350, 32000],
+    min: min,
+    max: max,
+    values: [min, max],
     range: true,
     stop: function (event, ui) {
 
