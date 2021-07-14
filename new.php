@@ -37,7 +37,8 @@ $str_pag = ceil($counter / $num);
               $active = '';
             }   
             $_GET['page'] = $i;
-            $_GET['new'] = 1;          
+            $_GET['new'] = 1;  
+            $_GET['pagination'] = 'on';              
             $req = build_http_query($_GET);            
             echo "<li><a class='paginator__item ".$active." ' href='/new.php?".$req."' >".$i."</a></li>";
           }           

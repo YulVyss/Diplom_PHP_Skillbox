@@ -39,15 +39,6 @@ function getSaleNewProducts($connect, $filter, $num, $start) {
         return mysqli_query($connect, $req);
     }
 }
-// получение распродаж и новинок 
-function getNewSaleProducts($connect) {
-    if (mysqli_connect_errno()) {
-        $err = "Ошибка ".mysqli_connect_error();
-        exit();
-    } else {
-        return mysqli_query($connect, "SELECT * from products where sale=1 and new=1");  
-    }
-}
 
 // вывод продуктов на главной странице
 function showProducts($products) {
@@ -87,24 +78,30 @@ function showProductsAdm($connect, $products) {
         $img = $row['img'];
         $name = $row['name'];
         $price = $row['price']; 
-        $section = $row['category_id'];
+        $sections = getProdCategory ($connect, $ID);
         $new = $row['new'];
         if($new==1){
             $newText='Да';
         } else {
             $newText='Нет';
-        }
-        ?>
+        } ?>
         <li class="product-item page-products__item">
             <b class="product-item__name"><?=$name?></b>
             <span class="product-item__field product-id"><?=$ID?></span>
             <span class="product-item__field product-price"><?=$price?></span>
-            <span class="product-item__field product-category"><?=getSection($connect, $section); ?></span>
+            <span class="product-item__field product-category">
+                <?php 
+                foreach($sections as $section) {
+                    echo getSection($connect, $section);
+                    echo '</br>';
+                } ?>
+            </span>
             <span class="product-item__field product-new"><?=$newText?></span>
             <a href="/products/productChange.php?id=<?=$ID?>" class="product-item__edit" aria-label="Редактировать"></a>
             <button class="product-item__delete"></button>
         </li>
-    <?php } 
+    
+    <?php    } 
 }
 
 // получение и вывод списка категорий во вкладке создание продукта
@@ -112,7 +109,7 @@ function getSectionName($connect, $sectionId = '') {
     $result = mysqli_query($connect, "SELECT * from sections");
     while($row = mysqli_fetch_assoc($result)) { 
         $selected = '';
-        if($row['id'] === $sectionId) {
+        if(in_array($row['id'], $sectionId)) {
             $selected = 'selected';
         }
         ?>
@@ -121,25 +118,58 @@ function getSectionName($connect, $sectionId = '') {
 }
 
 // добавление нового товара в БД во вкладке администратора /products/form.php
-function addNewProduct($connect, $name, $price, $photo, $section, $new, $sale) {
+function addNewProduct($connect, $name, $price, $photo, $new, $sale, $sections) {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
         echo json_encode($err);
         exit();
     } else {
-        mysqli_query($connect, "INSERT into products (name, price, activity, img, new, sale, category_id)
-        values ('$name', '$price', '1', '$photo', '$new', '$sale', '$section')");
+        mysqli_query($connect, "INSERT into products (name, price, activity, img, new, sale)
+        values ('$name', '$price', '1', '$photo', '$new', '$sale')");
+
+        $id_product = getProdID($connect);
+        $product_sections = explode(',', $sections);
+
+        foreach($product_sections as $section) {
+            mysqli_query($connect, "INSERT into products_sections (id_prod, id_section)
+            values ('$id_product', '$section')");
+        }
+       
     }
 }
 
+function getProdID ($connect) {
+    $result = mysqli_query($connect, "SELECT id FROM products ORDER BY id DESC LIMIT 1");
+    while($row = mysqli_fetch_assoc($result)) { 
+        $id_product = $row['id'];
+    }
+    return $id_product;
+}
+
+function getProdCategory ($connect, $id_product) {
+    $id_section = [];
+    $result = mysqli_query($connect, "SELECT id_section from products_sections where id_prod='$id_product' ");
+    while($row = mysqli_fetch_assoc($result)) { 
+        $id_section[] = $row['id_section'];
+    }
+    return $id_section;
+}
+
 // изменить продукт во вкладке администратора /products/productChange.php
-function editeProduct($connect, $id, $name, $price, $img, $new, $sale, $category) {
+function editeProduct($connect, $id, $name, $price, $img, $new, $sale, $categories) {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
         echo json_encode($err);
         exit();
     } else {
-        mysqli_query($connect, "UPDATE products SET name='$name', price='$price', img='$img', new='$new', sale='$sale', category_id='$category' where id='$id' ");
+        $categories_id = explode(',', $categories);
+        mysqli_query($connect, "DELETE from products_sections where id_prod='$id' ");
+        foreach($categories_id as $category) {
+            mysqli_query($connect, "INSERT into products_sections (id_prod, id_section)
+                values ('$id', '$category')");
+        }
+        
+        mysqli_query($connect, "UPDATE products SET name='$name', price='$price', img='$img', new='$new', sale='$sale' where id='$id' ");
         echo json_encode($name); 
         exit();
     }
@@ -151,7 +181,8 @@ function removeProduct($connect, $productID) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        mysqli_query($connect, "DELETE from products where id='$productID' ");
+        mysqli_query($connect, "DELETE from products_sections where id_prod='$productID' ");
+        mysqli_query($connect, "DELETE from products where id='$productID' ");        
     }
 }
 
@@ -199,35 +230,57 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
     } else {
         $start = 0;
     }    
-    $req = $reqStart;
-
-    if(isset($data['category']) && $data['category'] !== ''){  
-        $req .= 'where ';         
-        $category = $data['category']?? 0;
-        $min = $data['min']?? 0;
-        $max = $data['max']?? 100000;
-        $saleP = $data['sale']?? 0;
-        $newP = $data['new']?? 0;
-        if($category>0){
-            $req .= 'category_id='.$category . " and ";       
-        }         
-        if($saleP>0){
-            $req .= 'sale='.$saleP." and ";
+    $req = $reqStart;   
+    $min = $data['min']?? 0;
+    $max = $data['max']?? 100000;
+    $saleP = $data['sale']?? 0;
+    $newP = $data['new']?? 0;  
+    // выбор товаров по категории
+    if(isset($data['categoryChange'])) {
+        $catChange = $data['categoryChange'];
+        if($data['categoryChange'] > 0) {
+            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`id` where ps.`id_section`='$catChange' ";
+            if($saleP>0 && $newP == 0){
+                $req .= ' and sale='.$saleP." ";
+            } elseif($newP>0 && $saleP == 0){
+                $req .= ' and new='.$newP." ";
+            } elseif($newP > 0 && $saleP > 0) {
+                $req .= ' and new='.$newP.' and sale='.$saleP." ";
+            } 
         }
-        if($newP>0){
-            $req .= 'new='.$newP. " and ";
-        }    
-        $req .= ' price between '.$min.' and '.$max;        
     }
-    
-    if(!isset($data['category']) && isset($data['new'])) {
-        $req .= " where new=1 ";
-    }
+    // фильтр товаров по кнопке ПРИМЕНИТЬ
+    if(isset($data['aside']) && $data['aside'] == 'button'){   
+        if(isset($data['category']) && $data['category'] > 0) {
+            $category = $data['category'];
+            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`id` where ps.`id_section`='$category' and products.`price` between '$min' and '$max' ";
+            if($saleP>0 && $newP == 0){
+                $req .= ' and sale='.$saleP." ";
+            } elseif($newP>0 && $saleP == 0){
+                $req .= ' and new='.$newP." ";
+            } elseif($newP > 0 && $saleP > 0) {
+                $req .= ' and new='.$newP.' and sale='.$saleP." ";
+            } 
+        } else {
+             $req .= " where products.`price` between ".$min.' and '.$max;               
+            if($saleP>0 && $newP == 0){
+                $req .= ' and sale='.$saleP." ";
+            } elseif($newP>0 && $saleP == 0){
+                $req .= ' and new='.$newP." ";
+            } elseif($newP > 0 && $saleP > 0) {
+                $req .= ' and new='.$newP.' and sale='.$saleP." ";
+            }
+        }
+    } 
 
-    if(!isset($data['category']) && isset($data['sale'])) {
-        $req .= " where sale=1 ";
-    }      
-        
+    if(isset($data['pagination']) && $data['pagination'] == 'on' && !isset($data['categoryChange'])) {
+        if($saleP>0 && $newP == 0){
+            $req .= ' where sale='.$saleP." ";
+        } elseif($newP>0 && $saleP == 0){
+            $req .= ' where new='.$newP." ";
+        }
+    }
+            
     if(isset($data['sort']) && $data['sort'] !== ''){
         if($data['sort'] == 'sortByName' && $data['order'] == 'on'){
             $req .= " ORDER BY name ASC ";
@@ -239,6 +292,8 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
             $req .= " ORDER BY price DESC ";
         }
     }
+    
+    
 
     if($reqStart !== "SELECT COUNT(*) from products "){
         if($start > 0){
@@ -246,8 +301,8 @@ function getRequest($data, $num, $start, $reqStart = "SELECT * from products "){
         } else {
             $req .= " LIMIT $num";
         }
-    }   
-    
+    }
+
     return $req;
 }
 
@@ -256,9 +311,11 @@ function getSectionList($connect) {
     $result = mysqli_query($connect, "SELECT * from sections");
     while($row = mysqli_fetch_assoc($result)) { 
     if(isset($_GET['category']) && $_GET['category'] == $row['id']){
-    $active = 'active';
-    } else{
-    $active = 'AAA';
+        $active = 'active';
+    } elseif(isset($_GET['categoryChange']) && $_GET['categoryChange'] == $row['id']) {
+        $active = 'active';
+    } else {
+        $active = 'AAA';
     }
     ?>
     <li>

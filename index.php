@@ -3,6 +3,12 @@ include $_SERVER['DOCUMENT_ROOT'] . '/template/header.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/template/aside.php'; 
 $re = $_SERVER['REQUEST_URI'];
 
+
+$str1 = '1,2';
+$str2 = '4';
+$arr1 = explode(',', $str1);
+$arr2 = explode(',', $str2);
+
 if(isset($_GET['page']) && ($_GET['page'])){
   $start = ($_GET['page'] * $num) - $num;
   $req = getRequest($_GET, $num, $start, "SELECT * from products ");  

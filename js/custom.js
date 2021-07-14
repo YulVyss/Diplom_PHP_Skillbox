@@ -75,6 +75,7 @@ $('#sortOrder').change(function (e) {
   e.preventDefault();
   clearUrl()
   let query = makeReq()
+  query += "&aside=button"
   sendReq(query)
 })
 
@@ -85,10 +86,8 @@ $('.filter__list-item').click(function (e) {
 
   $('.active').removeClass('active');
   $(this).addClass('active');
-  let category = this.getAttribute('name')
-  if (category > 0) {
-    filter = `category=${category}`;
-  }
+  let category = parseInt(this.getAttribute('name'))
+  filter = `categoryChange=${category}`;
   // очистка сортировки
   $('#sortBy').val('Сортировка')
   $('#sortOrder').val('Порядок')
@@ -104,6 +103,7 @@ $('.filter__list-item').click(function (e) {
   } else {
     $('#new').removeAttr('checked');
   }
+  console.log(filter)
   sendReq(filter)
 })
 
@@ -111,6 +111,8 @@ $('.filter__list-item').click(function (e) {
 $('#filter-button').click(function (e) {
   e.preventDefault()
   let query = makeReq()
+  query += "&aside=button"
+  console.log(query)
   sendReq(query)
 })
 
@@ -135,7 +137,7 @@ function sendReq(query) {
 // собираем GET запрос
 function makeReq() {
   let page = ($('.paginator__item.active').html() !== undefined) ? $('.paginator__item.active').html() : 1
-  let category = document.querySelector('.filter__list-item.active').getAttribute('name')
+  let category = parseInt(document.querySelector('.filter__list-item.active').getAttribute('name'))
   let minP = parseInt($('.min-price').text())
   let maxP = parseInt($('.max-price').text())
   let filtNew = 0
@@ -153,7 +155,6 @@ function makeReq() {
     order = ''
   }
   filter = {
-    'category': category,
     'min': minP,
     'max': maxP,
     'new': filtNew,
@@ -161,10 +162,23 @@ function makeReq() {
     'sort': sort,
     'order': order,
   }
+  if (category > 0) {
+    filter = {
+      'category': category,
+      'min': minP,
+      'max': maxP,
+      'new': filtNew,
+      'sale': filtSale,
+      'sort': sort,
+      'order': order,
+    }
+  }
+
   let esc = encodeURIComponent;
   let query = Object.keys(filter)
     .map(k => esc(k) + '=' + esc(filter[k]))
     .join('&');
+  console.log(query)
   return query
 }
 
@@ -232,6 +246,11 @@ $('#changeProduct').submit(function (e) {
   }
   let form = document.querySelector('#changeProduct')
   let product = new FormData(form)
+  let cat = []
+  $('#category').each(function () {
+    cat.push($(this).val());
+  })
+  product.append('category', cat)
   product.append('id', id)
   product.append('change', 'product')
   for (let [name, value] of product) {

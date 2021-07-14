@@ -4,10 +4,11 @@ include $_SERVER['DOCUMENT_ROOT'] . '/include/login.php';
 
 // добавление нового товара
 if(isset($_POST['add'])) {
+  // var_dump($_POST);
   $product_name = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-name']));
   $product_price = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-price']));
   $product_photo = ($_FILES ["product-photo"]['name'])?? 'product.jpg';
-  $product_section = explode(',', $_POST['category']);
+  $product_sections = $_POST['category'];
   
   if(isset($_POST['new'])){
     $new = '1';
@@ -19,14 +20,12 @@ if(isset($_POST['add'])) {
   } else {
     $sale = 0;
   }
-  foreach($product_section as $section) {
-    addNewProduct($connect, $product_name, $product_price, $product_photo, $section, $new, $sale);
-  }
+  addNewProduct($connect, $product_name, $product_price, $product_photo, $new, $sale, $product_sections);
   echo json_encode($product_name);
 }
 
 // изменение товара
-if(isset($_POST['change']) && $_POST['change'] === 'product'){
+if(isset($_POST['change']) && $_POST['change'] === 'product') {
   $ID = $_POST['id'];
   $product_name = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-name']));
   $product_price = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-price']));
@@ -35,7 +34,7 @@ if(isset($_POST['change']) && $_POST['change'] === 'product'){
   } else {
     $product_photo = getImage($connect, $ID);
   }
-  $product_section = $_POST['category'];
+  $product_sections = $_POST['category'];
   if(isset($_POST['new'])){
     $new = '1';
   } else {
@@ -46,7 +45,7 @@ if(isset($_POST['change']) && $_POST['change'] === 'product'){
   } else {
     $sale = 0;
   }
-  editeProduct($connect, $ID, $product_name, $product_price, $product_photo, $new, $sale, $product_section);
+  editeProduct($connect, $ID, $product_name, $product_price, $product_photo, $new, $sale, $product_sections);
   echo json_encode($product_name);
 }
 

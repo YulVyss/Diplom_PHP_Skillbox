@@ -11,7 +11,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0) {
   while($row = mysqli_fetch_assoc($data)) {
     $name = $row['name'];
     $price = $row['price'];
-    $section = $row['category_id'];
     $new = $row['new'];
       
     if($new === 0) {
@@ -20,6 +19,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0) {
       $checked = 'checked';
     }
   }
+  $sections_id = [];
+  $sections = mysqli_query($connect, "SELECT id_section from products_sections where id_prod='$id' ");
+  while($row = mysqli_fetch_assoc($sections)) {
+    $sections_id[] = $row['id_section'];
+  }
+
 }
 ?>
 <main class="page-add">  
@@ -61,9 +66,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0) {
     <fieldset class="page-add__group custom-form__group">
       <legend class="page-add__small-title custom-form__title">Раздел</legend>
       <div class="page-add__select">
-        <select name="category" id="category" class="custom-form__select">
-          <option name='<?php getSectionName($connect) ?>'  hidden="">Название раздела</option>
-          <?php getSectionName($connect, $section); ?>
+        <select name="category" id="category" class="custom-form__select" multiple="multiple">
+          <option name='<?php getSectionName($connect, $sections_id) ?>'  hidden="">Название раздела</option>
+          <?php getSectionName($connect, $sections_id); ?>
         </select>
       </div>
       <input type="checkbox" name="new" id="new" class="custom-form__checkbox" <?=$checked?>>

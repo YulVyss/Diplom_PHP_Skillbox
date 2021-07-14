@@ -12,13 +12,13 @@
           <b class="filter__title">Категории</b>
           <ul class="filter__list">
           <?php
-            if(isset($_GET['category']) && $_GET['category'] > 0){ ?>               
+            if(!isset($_GET['category']) && !isset($_GET['categoryChange'])) { ?>               
               <li>
-                <a class="filter__list-item" href="all" name=0>Все</a>
+                <a class="filter__list-item active" href="all" name='0'>Все</a>
               </li>
-            <?php  } else { ?>
+          <?php } else { ?>
               <li>
-                <a class="filter__list-item active" href="all" name=0>Все</a>
+                <a class="filter__list-item" href="all" name='0'>Все</a>
               </li>
             <?php } 
               getSectionList($connect); ?>            
