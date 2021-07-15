@@ -33,7 +33,7 @@ $("#addProduct").submit(function (e) {
         prodName.innerHTML = `${html.product_name}`
         popupEnd.hidden = false;
       } else {
-        alert()
+        alert(html.error)
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
