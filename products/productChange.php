@@ -7,16 +7,21 @@ include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
 
 if(isset($_GET['id']) && $_GET['id'] > 0) {
   $id = $_GET['id'];
-  $data = mysqli_query($connect, "SELECT * from products where id='$id' ");
+  $data = mysqli_query($connect, "SELECT * from products where id=" . (int)$id);
   while($row = mysqli_fetch_assoc($data)) {
     $name = $row['name'];
     $price = $row['price'];
     $new = $row['new'];
-      
-    if($new === 0) {
-      $checked = '';
+    $sale = $row['sale']; 
+    if($new == 0) {
+      $newChecked = '';
     } else {
-      $checked = 'checked';
+      $newChecked = 'checked';
+    }
+    if($sale == 0) {
+      $saleChecked = '';
+    } else {
+      $saleChecked = 'checked';
     }
   }
   $sections_id = [];
@@ -71,9 +76,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0) {
           <?php getSectionName($connect, $sections_id); ?>
         </select>
       </div>
-      <input type="checkbox" name="new" id="new" class="custom-form__checkbox" <?=$checked?>>
+      <input type="checkbox" name="new" id="new" class="custom-form__checkbox" <?=$newChecked?>>
       <label for="new" class="custom-form__checkbox-label">Новинка</label>
-      <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox">
+      <input type="checkbox" name="sale" id="sale" class="custom-form__checkbox" <?=$saleChecked?>>
       <label for="sale" class="custom-form__checkbox-label">Распродажа</label>
     </fieldset>
     <button class="button changeProduct" type="submit" name="submit" value="submit">Сохранить изменения</button>

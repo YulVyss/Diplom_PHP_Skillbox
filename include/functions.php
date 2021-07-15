@@ -64,7 +64,7 @@ function showProducts($products) {
 
 // получение названия категории
 function getSection($connect, $section){
-    $section_names = mysqli_query($connect, "SELECT name from sections where id='$section' LIMIT 1");
+    $section_names = mysqli_query($connect, "SELECT name from sections where id=" . (int)$section . " LIMIT 1");
         while($row = mysqli_fetch_assoc($section_names)) {
             return $row['name'];
         }
@@ -132,7 +132,7 @@ function addNewProduct($connect, $name, $price, $photo, $new, $sale, $sections) 
 
         foreach($product_sections as $section) {
             mysqli_query($connect, "INSERT into products_sections (id_prod, id_section)
-            values ('$id_product', '$section')");
+            values ($id_product, $section)");
         }
        
     }
@@ -148,7 +148,7 @@ function getProdID ($connect) {
 
 function getProdCategory ($connect, $id_product) {
     $id_section = [];
-    $result = mysqli_query($connect, "SELECT id_section from products_sections where id_prod='$id_product' ");
+    $result = mysqli_query($connect, "SELECT id_section from products_sections where id_prod=" . (int)$id_product);
     while($row = mysqli_fetch_assoc($result)) { 
         $id_section[] = $row['id_section'];
     }
@@ -163,7 +163,7 @@ function editeProduct($connect, $id, $name, $price, $img, $new, $sale, $categori
         exit();
     } else {
         $categories_id = explode(',', $categories);
-        mysqli_query($connect, "DELETE from products_sections where id_prod='$id' ");
+        mysqli_query($connect, "DELETE from products_sections where id_prod=" . (int)$id);
         foreach($categories_id as $category) {
             mysqli_query($connect, "INSERT into products_sections (id_prod, id_section)
                 values ('$id', '$category')");
@@ -181,8 +181,8 @@ function removeProduct($connect, $productID) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        mysqli_query($connect, "DELETE from products_sections where id_prod='$productID' ");
-        mysqli_query($connect, "DELETE from products where id='$productID' ");        
+        mysqli_query($connect, "DELETE from products_sections where id_prod=" . (int)$productID);
+        mysqli_query($connect, "DELETE from products where id=" . (int)$productID);        
     }
 }
 
@@ -423,7 +423,7 @@ while($row = mysqli_fetch_assoc($orders)) {
 
 // получить цену за товар по номеру id
 function getProdPrice($connect, $id) {
-    $result = mysqli_query($connect, "SELECT price from products where id=$id");
+    $result = mysqli_query($connect, "SELECT price from products where id=" . (int)$id);
     while($row = mysqli_fetch_assoc($result)) {
         return $row['price'];
     }

@@ -25,14 +25,19 @@ $("#addProduct").submit(function (e) {
     contentType: false,
     processData: false,
     success: function (html) {
-      form.hidden = true;
       const prodName = document.querySelector('.product__added')
       const popupEnd = document.querySelector('.page-add__popup-end')
-      prodName.innerHTML = `${html}`
-      popupEnd.hidden = false;
+
+      if (html.status == 'ok') {
+        form.hidden = true;
+        prodName.innerHTML = `${html.product_name}`
+        popupEnd.hidden = false;
+      } else {
+        alert()
+      }
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      console.log('ERROR ' + errorThrown + jqXHR);
+      alert('ERROR ' + errorThrown + jqXHR);
     }
   })
 })

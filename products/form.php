@@ -3,12 +3,34 @@ include $_SERVER['DOCUMENT_ROOT'] . '/constant.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/include/login.php';
 
 // добавление нового товара
-if(isset($_POST['add'])) {
-  // var_dump($_POST);
+if(isset($_POST['add']) && isset($_FILES['product-photo']['tmp_name'])) {
+  
   $product_name = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-name']));
   $product_price = mysqli_real_escape_string($connect, htmlspecialchars($_POST['product-price']));
   $product_photo = ($_FILES ["product-photo"]['name'])?? 'product.jpg';
   $product_sections = $_POST['category'];
+
+  $photo = [];
+  $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/img/products/';
+  $fileTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+  $maxFileLoadSize = 5000000;
+  $tmp_name = $_FILES['product-photo']['tmp_name'];
+  $mime = mime_content_type($_FILES['product-photo']['tmp_name']);
+  $fileName = $_FILES['product-photo']['name'];
+  $response['status'] = 'bad';
+
+  if (in_array($mime, $fileTypes) && $size <= $maxFileLoadSize) {
+    move_uploaded_file($tmp_name, $uploadPath . $fileName);
+    $fileFullName = '/img/products/' . $fileName;
+    $response['status'] = 'ok';
+    $response['product_name'] = $product_name;
+  } elseif (in_array($mime, $fileTypes) && $size > $maxFileLoadSize) {
+    $response = 'Превышен допустимый размер файла!_____ ' . $fileName;
+    die(json_encode($response));
+  } else {
+    $response['error'] = 'допускаются только файлы с расширением .jpeg, .jpg, .png!________ ' . $fileName;
+    die(json_encode($response));
+  }
   
   if(isset($_POST['new'])){
     $new = '1';
@@ -21,7 +43,7 @@ if(isset($_POST['add'])) {
     $sale = 0;
   }
   addNewProduct($connect, $product_name, $product_price, $product_photo, $new, $sale, $product_sections);
-  echo json_encode($product_name);
+  die(json_encode($response));
 }
 
 // изменение товара
