@@ -8,7 +8,6 @@
             <span class="req">*</span> поля обязательные для заполнения
           </p>
           <input type="text" name="prod-id" class="prod-id" hidden>
-          <input type="text" name="prod-price" class="prod-price" hidden>
           <div class="custom-form__column">
             <label class="custom-form__input-wrapper" for="surname">
               <input id="surname" class="custom-form__input" type="text" name="surname" placeholder="Фамилия" required="">

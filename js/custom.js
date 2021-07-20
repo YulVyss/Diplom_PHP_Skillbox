@@ -24,20 +24,21 @@ $("#addProduct").submit(function (e) {
     dataType: 'json',
     contentType: false,
     processData: false,
-    success: function (html) {
+    success: function (data) {
       const prodName = document.querySelector('.product__added')
       const popupEnd = document.querySelector('.page-add__popup-end')
 
-      if (html.status == 'ok') {
+      if (data.status == 'ok') {
+        console.log(data.status)
         form.hidden = true;
-        prodName.innerHTML = `${html.product_name}`
+        prodName.innerHTML = `${data.product_name}`
         popupEnd.hidden = false;
       } else {
-        alert(html.error)
+        alert('Произошла ошибка: ' + data.error)
       }
     },
-    error: function (jqXHR, textStatus, errorThrown) {
-      alert('ERROR ' + errorThrown + jqXHR);
+    error: function (errorThrown) {
+      alert('ERROR ' + errorThrown);
     }
   })
 })
@@ -108,7 +109,11 @@ $('.filter__list-item').click(function (e) {
   } else {
     $('#new').removeAttr('checked');
   }
-  console.log(filter)
+  // сброс диапазона цен
+  const initialMinimumValue = parseInt($('.min-range').attr('data-val'))
+  const initialMaximumValue = parseInt($('.max-range').attr('data-val'))
+  changeRange(initialMinimumValue, initialMaximumValue)
+
   sendReq(filter)
 })
 
@@ -272,13 +277,20 @@ $('#changeProduct').submit(function (e) {
     contentType: false,
     processData: false,
     success: function (data) {
-      form.hidden = true;
-      prodName.innerHTML = `${data}`
-      popupEnd.hidden = false;
+      const prodName = document.querySelector('.product__added')
+      const popupEnd = document.querySelector('.page-add__popup-end')
+      console.log(data);
+      if (data.status == 'ok') {
+        form.hidden = true;
+        prodName.innerHTML = `${data.product_name}`
+        popupEnd.hidden = false;
+      } else {
+        alert('ошибка загрузки: ' + data.error)
+      }
     },
     error: function (jqXHR, errorThrown) {
-      prodName.innerHTML = 'ERROR ' + errorThrown + jqXHR;
-      popupEnd.hidden = true;
+      alert('ошибка ' + errorThrown);
+      console.log("Ошибка")
     }
   })
 })
@@ -302,20 +314,21 @@ $('#btn-order').click(function (e) {
     contentType: false,
     processData: false,
     success: function (data) {
-      if (parseInt(data) > 0) {
-        $('.order-summ').html(`${data}`)
+      console.log(data.status == 'ok')
+      if (data.status == 'ok' && parseInt(data.productPrice) > 0) {
+        $('.order-summ').html(`${data.productPrice}`)
         toggleHidden(shopOrder, popupEnd);
         popupEnd.classList.add('fade');
         setTimeout(() => popupEnd.classList.remove('fade'), 1000);
         $('#order')[0].reset()
       } else {
-        alert(data)
+        alert("Произошла ошибка: " + data.status)
       }
 
     },
     error: function (jqXHR, errorThrown) {
-      alert('Произошла ошибка при заполнении формы')
-      console.log('ERROR ' + errorThrown + ' ' + jqXHR);
+      alert('Произошла ошибка при отправке данных')
+      console.log('ERROR ' + errorThrown);
     }
   })
 })
@@ -348,6 +361,5 @@ const urlParams = new URLSearchParams(location.search);
 if (urlParams.has('min') && urlParams.has('max')) {
   let min = urlParams.get('min')
   let max = urlParams.get('max')
-  console.log(min + ' ' + max)
   changeRange(min, max)
 }

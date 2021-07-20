@@ -11,8 +11,8 @@ $arr2 = explode(',', $str2);
 
 if(isset($_GET['page']) && ($_GET['page'])){
   $start = ($_GET['page'] * $num) - $num;
-  $req = getRequest($_GET, $num, $start, "SELECT * from products ");  
-  $count = getRequest($_GET, $num, $start, "SELECT COUNT(*) from products ");
+  $req = getRequestMain($_GET, $num, $start, "SELECT * from products ");  
+  $count = getRequestMain ($_GET, $num, $start, "SELECT COUNT(*) from products ");
   $counter = getCounter($connect, $count);
   $products = getFilterCategoryProducts($connect, $req);    
 } else {

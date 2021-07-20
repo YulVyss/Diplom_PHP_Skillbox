@@ -116,7 +116,7 @@ if (shopList) {
 
       const shopOrder = document.querySelector('.shop-page__order');
       document.querySelector('.prod-id').value = id;
-      document.querySelector('.prod-price').value = price;
+      // document.querySelector('.prod-price').value = price;
       toggleHidden(document.querySelector('.intro'), document.querySelector('.shop'), shopOrder);
 
       window.scroll(0, 0);
@@ -318,7 +318,7 @@ if (productsList) {
 if (document.querySelector('.shop-page')) {
   const min = +$('.min-range').html()
   const max = +$('.max-range').html()
-  console.log(min + ' ' + max)
+
   $('.range__line').slider({
     min: min,
     max: max,

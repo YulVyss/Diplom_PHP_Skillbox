@@ -6,8 +6,8 @@ $counter = getCounter($connect, 'SELECT COUNT(*) FROM products where new=1 ');
 
 if(isset($_GET['page']) && ($_GET['page'])){
   $start = ($_GET['page'] * $num) - $num;
-  $req = getRequest($_GET, $num, $start, "SELECT * from products ");    
-  $count = getRequest($_GET, $num, $start, "SELECT COUNT(*) from products ");
+  $req = getRequestNew($_GET, $num, $start, "SELECT * from products ");   
+  $count = getRequestNew($_GET, $num, $start, "SELECT COUNT(*) from products ");
   $counter = getCounter($connect, $count);
   $products = getFilterCategoryProducts($connect, $req);    
 } else {
@@ -37,8 +37,7 @@ $str_pag = ceil($counter / $num);
               $active = '';
             }   
             $_GET['page'] = $i;
-            $_GET['new'] = 1;  
-            $_GET['pagination'] = 'on';              
+            $_GET['new'] = 1;   
             $req = build_http_query($_GET);            
             echo "<li><a class='paginator__item ".$active." ' href='/new.php?".$req."' >".$i."</a></li>";
           }           
