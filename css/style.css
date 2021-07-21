@@ -1164,3 +1164,6 @@ a:focus {
 .product__added{
   color: #e45446;
 }
+.prod-id{
+  opacity: 0;
+}

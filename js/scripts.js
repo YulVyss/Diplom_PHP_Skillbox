@@ -111,10 +111,12 @@ if (shopList) {
     const prod = evt.path || (evt.composedPath && evt.composedPath());;
 
     if (prod.some(pathItem => pathItem.classList && pathItem.classList.contains('shop__item'))) {
+
       const id = prod[0].querySelector('.id').textContent
       const price = parseInt(prod[0].querySelector('.product__price').textContent)
 
       const shopOrder = document.querySelector('.shop-page__order');
+
       document.querySelector('.prod-id').value = id;
       // document.querySelector('.prod-price').value = price;
       toggleHidden(document.querySelector('.intro'), document.querySelector('.shop'), shopOrder);
@@ -157,10 +159,10 @@ if (shopList) {
 
           evt.preventDefault();
 
-          // toggleHidden(shopOrder, popupEnd);
+          toggleHidden(shopOrder, popupEnd);
 
-          // popupEnd.classList.add('fade');
-          // setTimeout(() => popupEnd.classList.remove('fade'), 1000);
+          popupEnd.classList.add('fade');
+          setTimeout(() => popupEnd.classList.remove('fade'), 1000);
 
           window.scroll(0, 0);
 
@@ -339,7 +341,3 @@ if (document.querySelector('.shop-page')) {
   });
 
 }
-
-
-
-

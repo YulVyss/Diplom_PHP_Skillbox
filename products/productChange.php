@@ -7,7 +7,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/template/header_adm.php';
 
 if(isset($_GET['id']) && $_GET['id'] > 0) {
   $id = $_GET['id'];
-  $data = mysqli_query($connect, "SELECT * from products where id=" . (int)$id);
+  $data = mysqli_query($connect, "SELECT * from products where product_id=" . (int)$id);
   while($row = mysqli_fetch_assoc($data)) {
     $name = $row['name'];
     $price = $row['price'];

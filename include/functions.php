@@ -20,7 +20,7 @@ function createUser($connect, $name, $login, $password, $rights) {
 // createUser($connect, 'operator2', 'operator2@fashion.ru', '33p2eh84', 'operator');
 
 // получение из БД всех продуктов 
-function getAllProducts($connect, $num, $start, $sort = 'ORDER BY id ASC') {
+function getAllProducts($connect, $num, $start, $sort = 'ORDER BY product_id ASC') {
     if (mysqli_connect_errno()) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
@@ -46,14 +46,14 @@ function showProducts($products) {
         $img = $row['img'];
         $name = $row['name'];
         $price = $row['price']; 
-        $id = $row['id'];
+        $id = $row['product_id'];
         ?>
         <article class="shop__item product" tabindex="0">
             <div class="product__image">
             <img src="./img/products/<?=$img?>" alt="product-image">
             </div>
             <p class="product__name"><?=$name?></p>
-            <span class="id" hidden><?=$id?></span>
+            <p><span class="id" ><?=$id?></span></p>
             <span class="product__price"><?=$price?> руб.</span>
             <span class="product__new"><?= $row['new'] == 1 ? 'new' : ''?></span>
             <span class="product__sale"><?= $row['sale'] == 1 ? 'sale' : ''?></span>
@@ -74,7 +74,7 @@ function getSection($connect, $section){
 // вывод списка продуктов во вкладке администратора
 function showProductsAdm($connect, $products) {
     while($row = mysqli_fetch_assoc($products)) { 
-        $ID = $row['id'];
+        $ID = $row['product_id'];
         $img = $row['img'];
         $name = $row['name'];
         $price = $row['price']; 
@@ -138,9 +138,9 @@ function addNewProduct($connect, $name, $price, $photo, $new, $sale, $sections) 
 }
 // получить ID последнего добавленного товара
 function getProdID ($connect) {
-    $result = mysqli_query($connect, "SELECT id FROM products ORDER BY id DESC LIMIT 1");
+    $result = mysqli_query($connect, "SELECT product_id FROM products ORDER BY product_id DESC LIMIT 1");
     while($row = mysqli_fetch_assoc($result)) { 
-        $id_product = $row['id'];
+        $id_product = $row['product_id'];
     }
     return $id_product;
 }
@@ -166,7 +166,7 @@ function editeProduct($connect, $id, $name, $price, $img, $new, $sale, $categori
             mysqli_query($connect, "INSERT into products_sections (id_prod, id_section)
                 values ('$id', '$category')");
         }        
-        mysqli_query($connect, "UPDATE products SET name='$name', price='$price', img='$img', new='$new', sale='$sale' where id='$id' ");
+        mysqli_query($connect, "UPDATE products SET name='$name', price='$price', img='$img', new='$new', sale='$sale' where product_id='$id' ");
         return $name; 
     }
 }
@@ -178,7 +178,7 @@ function removeProduct($connect, $productID) {
         exit();
     } else {
         mysqli_query($connect, "DELETE from products_sections where id_prod=" . (int)$productID);
-        mysqli_query($connect, "DELETE from products where id=" . (int)$productID);        
+        mysqli_query($connect, "DELETE from products where product_id=" . (int)$productID);        
     }
 }
 
@@ -236,7 +236,7 @@ function getRequestMain($data, $num, $start, $reqStart = "SELECT * from products
     if(isset($data['categoryChange'])) {
         $catChange = $data['categoryChange'];
         if($data['categoryChange'] > 0) {
-            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`id` where ps.`id_section`='$catChange' ";
+            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`product_id` where ps.`id_section`=" .$catChange;
             if($saleP>0 && $newP == 0){
                 $req .= ' and sale='.$saleP." ";
             } elseif($newP>0 && $saleP == 0){
@@ -250,7 +250,7 @@ function getRequestMain($data, $num, $start, $reqStart = "SELECT * from products
     if(isset($data['aside']) && $data['aside'] == 'button'){   
         if(isset($data['category']) && $data['category'] > 0) {
             $category = $data['category'];
-            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`id` where ps.`id_section`='$category' and products.`price` between '$min' and '$max' ";
+            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`product_id` where ps.`id_section`='$category' and products.`price` between '$min' and '$max' ";
             if($saleP>0 && $newP == 0){
                 $req .= ' and sale='.$saleP." ";
             } elseif($newP>0 && $saleP == 0){
@@ -319,7 +319,7 @@ function getRequestNew($data, $num, $start, $reqStart = "SELECT * from products 
     if(isset($data['categoryChange'])) {
         $catChange = $data['categoryChange'];
         if($data['categoryChange'] > 0) {
-            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`id` where ps.`id_section`='$catChange' and new=1 ";
+            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`product_id` where ps.`id_section`='$catChange' and new=1 ";
             if($saleP>0){
                 $req .= ' and sale='.$saleP." ";
             }
@@ -329,7 +329,7 @@ function getRequestNew($data, $num, $start, $reqStart = "SELECT * from products 
     
         if(isset($data['category']) && $data['category'] > 0) {
             $category = $data['category'];
-            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`id` where ps.`id_section`='$category' and products.`price` between '$min' and '$max' and new=1 ";
+            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`product_id` where ps.`id_section`='$category' and products.`price` between '$min' and '$max' and new=1 ";
             if($saleP>0){
                 $req .= ' and sale='.$saleP." ";
             }
@@ -383,7 +383,7 @@ function getRequestSale($data, $num, $start, $reqStart = "SELECT * from products
     if(isset($data['categoryChange'])) {
         $catChange = $data['categoryChange'];
         if($data['categoryChange'] > 0) {
-            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`id` where ps.`id_section`='$catChange' and sale=1 ";
+            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`product_id` where ps.`id_section`='$catChange' and sale=1 ";
             if($newP>0){
                 $req .= ' and new='.$newP." ";
             }
@@ -393,7 +393,7 @@ function getRequestSale($data, $num, $start, $reqStart = "SELECT * from products
     
         if(isset($data['category']) && $data['category'] > 0) {
             $category = $data['category'];
-            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`id` where ps.`id_section`='$category' and products.`price` between '$min' and '$max' and sale=1 ";
+            $req .= " JOIN products_sections as ps ON ps.`id_prod`=products.`product_id` where ps.`id_section`='$category' and products.`price` between '$min' and '$max' and sale=1 ";
             if($newP>0){
                 $req .= ' and new='.$newP." ";
             }
@@ -550,7 +550,7 @@ function showOrders($connect, $orders) {
 
 // получить цену за товар по номеру id
 function getProdPrice($connect, $id) {
-    $result = mysqli_query($connect, "SELECT price from products where id=".(int)$id);
+    $result = mysqli_query($connect, "SELECT price from products where product_id=".(int)$id);
     while($row = mysqli_fetch_assoc($result)) {
         $price = $row['price'];
     }
@@ -563,7 +563,7 @@ function getImage($connect, $id) {
         $err = "Ошибка ".mysqli_connect_error();
         exit();
     } else {
-        $result = mysqli_query($connect, "SELECT img from products where id = '$id'");
+        $result = mysqli_query($connect, "SELECT img from products where product_id = '$id'");
         while($row = mysqli_fetch_assoc($result)) {
             return $row['img'];
         }

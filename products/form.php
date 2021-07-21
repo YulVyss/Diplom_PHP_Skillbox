@@ -132,9 +132,9 @@ if(isset($_POST['prod-id']) && $_POST['prod-id'] !== '') {
     die(json_encode($result));
   }
   if($productPrice <= $minsum && $delivery === 'Курьерная доставка') {
-    $productPrice += $delivery;      
+    $productPrice += $deliveryPrice;
   }
-  // echo $date .','. $productPrice .','. $name .','. $surname .','. $thirdname .','. $email .','. $phone .','. $delivery .','. $payment .','. $status .','. $comments .','. $city .','. $street .','. $home .','. $aprt .','. $productId;
+  
   $result['status'] = addNewOrder($connect, $date, $productPrice, $name, $surname, $thirdname, $email, $phone, $delivery, $payment, $status, $comments, $city, $street, $home, $aprt, $productId);
   
   $result['productPrice'] = $productPrice;

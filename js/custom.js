@@ -314,12 +314,11 @@ $('#btn-order').click(function (e) {
     contentType: false,
     processData: false,
     success: function (data) {
-      console.log(data.status == 'ok')
       if (data.status == 'ok' && parseInt(data.productPrice) > 0) {
         $('.order-summ').html(`${data.productPrice}`)
-        toggleHidden(shopOrder, popupEnd);
-        popupEnd.classList.add('fade');
-        setTimeout(() => popupEnd.classList.remove('fade'), 1000);
+        // toggleHidden(shopOrder, popupEnd);
+        // popupEnd.classList.add('fade');
+        // setTimeout(() => popupEnd.classList.remove('fade'), 1000);
         $('#order')[0].reset()
       } else {
         alert("Произошла ошибка: " + data.status)
