@@ -53,7 +53,7 @@ function showProducts($products) {
             <img src="./img/products/<?=$img?>" alt="product-image">
             </div>
             <p class="product__name"><?=$name?></p>
-            <p><span class="id" ><?=$id?></span></p>
+            <span class="id" hidden><?=$id?></span>
             <span class="product__price"><?=$price?> руб.</span>
             <span class="product__new"><?= $row['new'] == 1 ? 'new' : ''?></span>
             <span class="product__sale"><?= $row['sale'] == 1 ? 'sale' : ''?></span>

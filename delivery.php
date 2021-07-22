@@ -63,7 +63,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
       </header>
       <ul class="page-delivery__list">
         <li>
-          <b class="page-delivery__item-title">Стандартная доставка - <?=$delivery?> РУБ / БЕСПЛАТНО (ДЛЯ ЗАКАЗОВ ОТ <?=$minsum?> РУБ)</b>
+          <b class="page-delivery__item-title">Стандартная доставка - <?=$deliveryPrice?> РУБ / БЕСПЛАТНО (ДЛЯ ЗАКАЗОВ ОТ <?=$minsum?> РУБ)</b>
           <p class="page-delivery__item-desc">
             Примерный срок доставки составит около 2-7 рабочих дней, в зависимости от адреса доставки.
           </p>
@@ -76,7 +76,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/include/functions.php';
           </p>
         </li>
         <li>
-          <b class="page-delivery__item-title">Доставка с примеркой перед покупкой по Москве - <?=$delivery?> РУБ / БЕСПЛАТНО (ПРИ
+          <b class="page-delivery__item-title">Доставка с примеркой перед покупкой по Москве - <?=$deliveryPrice?> РУБ / БЕСПЛАТНО (ПРИ
             ВЫКУПЕ НА СУММУ ОТ <?=$minsum?> РУБ)</b>
           <p class="page-delivery__item-desc">
             Доставка возможна только по Москве (в пределах МКАД) в течение 2-3 дней.

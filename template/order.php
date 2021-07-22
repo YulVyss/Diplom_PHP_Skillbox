@@ -104,6 +104,6 @@
     <div class="shop-page__wrapper shop-page__wrapper--popup-end">
       <h2 class="h h--1 h--icon shop-page__end-title">Спасибо <span class="resp"></span> за заказ!</h2>
       <p class="shop-page__end-message">Ваш заказ на сумму <span class=order-summ></span> р. успешно оформлен, с вами свяжутся в ближайшее время</p>
-      <button class="button">Продолжить покупки</button>
+      <button class="button proceed">Продолжить покупки</button>
     </div>
   </section>

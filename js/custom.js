@@ -314,12 +314,28 @@ $('#btn-order').click(function (e) {
     contentType: false,
     processData: false,
     success: function (data) {
+
       if (data.status == 'ok' && parseInt(data.productPrice) > 0) {
         $('.order-summ').html(`${data.productPrice}`)
-        // toggleHidden(shopOrder, popupEnd);
-        // popupEnd.classList.add('fade');
-        // setTimeout(() => popupEnd.classList.remove('fade'), 1000);
+
+        toggleHidden(shopOrder, popupEnd);
+        popupEnd.classList.add('fade');
+        setTimeout(() => popupEnd.classList.remove('fade'), 1000);
+        window.scroll(0, 0);
+        const buttonEnd = popupEnd.querySelector('.button');
+
+        buttonEnd.addEventListener('click', () => {
+          if (!popupEnd.classList.contains('fade-reverse')) {
+            popupEnd.classList.add('fade-reverse');
+            setTimeout(() => {
+              popupEnd.classList.remove('fade-reverse');
+              toggleHidden(popupEnd, document.querySelector('.intro'), document.querySelector('.shop'));
+            }, 1000);
+          }
+
+        });
         $('#order')[0].reset()
+
       } else {
         alert("Произошла ошибка: " + data.status)
       }

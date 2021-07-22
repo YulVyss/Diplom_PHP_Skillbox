@@ -113,19 +113,19 @@ if (shopList) {
     if (prod.some(pathItem => pathItem.classList && pathItem.classList.contains('shop__item'))) {
 
       const id = prod[0].querySelector('.id').textContent
-      const price = parseInt(prod[0].querySelector('.product__price').textContent)
-
+      // const price = parseInt(prod[0].querySelector('.product__price').textContent)
+      // страница заказа
       const shopOrder = document.querySelector('.shop-page__order');
 
       document.querySelector('.prod-id').value = id;
-      // document.querySelector('.prod-price').value = price;
+
+      // скрыть/открыть боковую панель intro и shop, страницу заказа
       toggleHidden(document.querySelector('.intro'), document.querySelector('.shop'), shopOrder);
 
       window.scroll(0, 0);
-
       shopOrder.classList.add('fade');
       setTimeout(() => shopOrder.classList.remove('fade'), 1000);
-
+      // форма заказа
       const form = shopOrder.querySelector('.custom-form');
       labelHidden(form);
 
@@ -155,10 +155,10 @@ if (shopList) {
           }
         });
 
-        if (inputs.every(inp => !!inp.value)) {
+        if (inputs.every(inp => !!inp.value) && order == 'done') {
 
           evt.preventDefault();
-
+          console.log('done')
           toggleHidden(shopOrder, popupEnd);
 
           popupEnd.classList.add('fade');
@@ -182,6 +182,7 @@ if (shopList) {
             }, 1000);
 
           });
+
 
         } else {
           window.scroll(0, 0);
